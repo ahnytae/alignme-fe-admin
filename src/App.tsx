@@ -1,24 +1,14 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div className="bg-background-primary text-content-primary">
+        <h1 className="text-heading-large text-brand-primary">제목</h1>
+        <p className="text-paragraph-base text-content-secondary">본문 내용</p>
+        <button className="bg-feature-easy text-core-white">쉬운 난이도</button>
+        <div className="border border-border-primary"></div>
+      </div>
     </div>
   );
 }

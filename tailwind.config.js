@@ -2,10 +2,10 @@
 module.exports = {
   darkMode: ["class"],
   content: [
-    './pages/**/*.{ts,tsx}',
-    './components/**/*.{ts,tsx}',
-    './app/**/*.{ts,tsx}',
-    './src/**/*.{ts,tsx}',
+    "./pages/**/*.{ts,tsx}",
+    "./components/**/*.{ts,tsx}",
+    "./app/**/*.{ts,tsx}",
+    "./src/**/*.{ts,tsx}",
   ],
   prefix: "",
   theme: {
@@ -51,6 +51,31 @@ module.exports = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+
+        // Custom properties
+        "core-white": "#FFFFFF",
+        "core-black": "#000000",
+        "content-primary": "zinc-950",
+        "content-secondary": "zinc-500",
+        "content-tertiary": "zinc-400",
+        "background-primary": "#FFFFFF",
+        "background-secondary": "#FAFAFA",
+        "background-tertiary": "#F4F4F5",
+        "border-primary": "#E4E4E7",
+        "border-secondary": "#F4F4F5",
+        "border-tertiary": "zinc-50",
+        "border-hover-overlay": "rgba(0, 0, 0, 0.2)",
+        "feature-easy": "#8BC34A",
+        "feature-medium": "#FFC107",
+        "feature-hard": "#FF5722",
+        "brand-primary": {
+          DEFAULT: "#98FF98",
+          200: "#00A500",
+        },
+        secondary: {
+          DEFAULT: "#18181B",
+          100: "#FAFAFA",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -71,7 +96,115 @@ module.exports = {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
       },
+
+      // Custom properties
+      fontSize: {
+        "display-large": [
+          "48px",
+          {
+            lineHeight: "48px",
+            fontWeight: "800",
+            letterSpacing: "-2.5%",
+          },
+        ],
+        "heading-large": [
+          "36px",
+          {
+            lineHeight: "48px",
+            fontWeight: "700",
+            letterSpacing: "-2.5%",
+          },
+        ],
+        "heading-medium": [
+          "30px",
+          {
+            lineHeight: "40px",
+            fontWeight: "700",
+            letterSpacing: "-2.5%",
+          },
+        ],
+        "heading-small": [
+          "24px",
+          {
+            lineHeight: "32px",
+            fontWeight: "700",
+            letterSpacing: "-2.5%",
+          },
+        ],
+        "heading-tiny": [
+          "20px",
+          {
+            lineHeight: "28px",
+            fontWeight: "700",
+            letterSpacing: "-2.5%",
+          },
+        ],
+        "label-large": [
+          "18px",
+          {
+            lineHeight: "28px",
+            fontWeight: "600",
+            letterSpacing: "0%",
+          },
+        ],
+        "label-base": [
+          "16px",
+          {
+            lineHeight: "24px",
+            fontWeight: "600",
+            letterSpacing: "0%",
+          },
+        ],
+        "label-small": [
+          "14px",
+          {
+            lineHeight: "20px",
+            fontWeight: "600",
+            letterSpacing: "0%",
+          },
+        ],
+        "label-tiny": [
+          "12px",
+          {
+            lineHeight: "16px",
+            fontWeight: "600",
+            letterSpacing: "0%",
+          },
+        ],
+        "paragraph-large": [
+          "18px",
+          {
+            lineHeight: "28px",
+            fontWeight: "500",
+            letterSpacing: "0%",
+          },
+        ],
+        "paragraph-base": [
+          "16px",
+          {
+            lineHeight: "24px",
+            fontWeight: "500",
+            letterSpacing: "0%",
+          },
+        ],
+        "paragraph-small": [
+          "14px",
+          {
+            lineHeight: "20px",
+            fontWeight: "500",
+            letterSpacing: "0%",
+          },
+        ],
+        "paragraph-tiny": [
+          "12px",
+          {
+            lineHeight: "16px",
+            fontWeight: "500",
+            letterSpacing: "0%",
+          },
+        ],
+      },
     },
   },
   plugins: [require("tailwindcss-animate")],
-}
+};
