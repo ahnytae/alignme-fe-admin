@@ -8,13 +8,13 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: '',
         primary:
           'bg-brand-primary hover:bg-brand-primary/90 text-paragraph-small text-content-primary',
         secondary: 'text-paragraph-small bg-secondary hover:bg-secondary/90 text-core-white',
         outline: 'text-content-primary text-label-small border border-border-primary',
         light: 'bg-gray-500 hover:bg-gray-500/90 text-label-small text-gray-50',
         ghost: 'text-label-small text-core-white',
+        custom: '',
       },
       size: {
         sm: 'px-3 py-2',
@@ -25,7 +25,7 @@ const buttonVariants = cva(
       },
     },
     defaultVariants: {
-      variant: 'default',
+      variant: 'secondary',
       size: 'sm',
     },
   }
