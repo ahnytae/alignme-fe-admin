@@ -1,4 +1,4 @@
-import "./App.css";
+import { Button } from "./components/ui/button";
 
 function App() {
   return (
@@ -7,7 +7,6 @@ function App() {
         <h1 className="text-heading-large text-brand-primary">제목</h1>
         <p className="text-paragraph-base text-content-secondary">본문 내용</p>
         <button className="bg-feature-easy text-core-white">쉬운 난이도</button>
-        <div className="border border-border-primary"></div>
       </div>
     </div>
   );
