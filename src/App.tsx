@@ -1,4 +1,4 @@
-import Router from './router'
+import Router from './router';
 function App() {
   return (
     <>
@@ -17,7 +17,7 @@ function App() {
         </div>
       </div> */}
     </>
-  )
+  );
 }
 
-export default App
+export default App;
