@@ -63,7 +63,17 @@
   * {
     @apply border-border;
   }
+  html {
+    width: 100%;
+    height: 100%;
+  }
   body {
     @apply bg-background text-foreground;
+    width: 100%;
+    height: 100%;
+  }
+  #root {
+    width: 100%;
+    height: 100%;
   }
 }
