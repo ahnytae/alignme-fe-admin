@@ -66,4 +66,11 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  @font-face {
+    font-family: 'Sora', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+  }
 }

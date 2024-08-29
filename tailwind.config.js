@@ -17,6 +17,9 @@ module.exports = {
       },
     },
     extend: {
+      fontFamily: {
+        sora: ["Sora", "sans-serif"],
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -55,15 +58,15 @@ module.exports = {
         // Custom properties
         "core-white": "#FFFFFF",
         "core-black": "#000000",
-        "content-primary": "zinc-950",
-        "content-secondary": "zinc-500",
-        "content-tertiary": "zinc-400",
+        "content-primary": "#09090B",
+        "content-secondary": "#62626A",
+        "content-tertiary": "#A1A1AA",
         "background-primary": "#FFFFFF",
         "background-secondary": "#FAFAFA",
         "background-tertiary": "#F4F4F5",
         "border-primary": "#E4E4E7",
         "border-secondary": "#F4F4F5",
-        "border-tertiary": "zinc-50",
+        "border-tertiary": "#FAFAFA",
         "border-hover-overlay": "rgba(0, 0, 0, 0.2)",
         "feature-easy": "#8BC34A",
         "feature-medium": "#FFC107",
@@ -76,6 +79,7 @@ module.exports = {
           DEFAULT: "#18181B",
           100: "#FAFAFA",
         },
+        "system-error": "#F31260",
       },
       borderRadius: {
         lg: "var(--radius)",
