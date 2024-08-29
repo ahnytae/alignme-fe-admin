@@ -1,4 +1,4 @@
 {
-  "typescript.preferences.autoImportFileExcludePatterns": ["@radix-ui"],
+  "typescript.preferences.autoImportFileExcludePatterns": ["@radix-ui", "vaul"],
   "tailwindCSS.experimental.classRegex": [["cva\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"]]
 }
