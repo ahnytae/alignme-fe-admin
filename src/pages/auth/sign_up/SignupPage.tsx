@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import KaKaoButton from '../components/KaKaoButton';
 
 type PageParams = 'instructor' | 'studio';
@@ -13,8 +13,13 @@ const PAGE_TYPE: Record<PageParams, { title: string; description: string }> = {
 
 const SignupPage = () => {
   const { type } = useParams<{ type: PageParams }>();
+  const navigate = useNavigate();
 
-  if (!type) {
+  const handleOauth = () => {
+    navigate(`/signup/${type}/info`);
+  };
+
+  if (!type || !(type in PAGE_TYPE)) {
     return <div>ㅜ.ㅜ</div>;
   }
 
@@ -31,7 +36,7 @@ const SignupPage = () => {
 
         <div>
           {/** 카카오 로그인 */}
-          <KaKaoButton />
+          <KaKaoButton onClick={handleOauth}>카카오톡으로 시작하기</KaKaoButton>
 
           {/** 개인정보 보호정책 */}
           <p className="mt-6 whitespace-pre-line text-center text-sm text-content-tertiary">
