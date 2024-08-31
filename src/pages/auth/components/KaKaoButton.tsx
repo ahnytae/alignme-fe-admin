@@ -1,7 +1,7 @@
-import { Button } from '@/components/ui/button'
+import { Button } from '@/components/ui/button';
 
 interface Props {
-  content?: string
+  content?: string;
 }
 
 const KaKaoButton = ({ content = '카카오톡으로 시작하기' }: Props) => {
@@ -9,12 +9,12 @@ const KaKaoButton = ({ content = '카카오톡으로 시작하기' }: Props) => 
     <Button
       variant="custom"
       size="area"
-      className="max-w-[380px] gap-3 rounded-xl bg-[#FEE500] text-label-base text-[#191919]"
+      className="w-[380px] gap-3 rounded-xl bg-[#FEE500] text-label-base text-[#191919]"
       startAdornment={<img src={`${process.env.PUBLIC_URL}/assets/icon/kakao.svg`} alt="kakao symbol" />}
     >
       {content}
     </Button>
-  )
-}
+  );
+};
 
-export default KaKaoButton
+export default KaKaoButton;

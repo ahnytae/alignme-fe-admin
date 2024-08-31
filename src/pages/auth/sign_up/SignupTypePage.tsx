@@ -1,25 +1,27 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
+import SelectButton from '../components/SelectButton';
 
 const SignupTypePage = () => {
-  /** HOOKS */
+  /** hooks */
   const navigate = useNavigate();
 
-  /** STATES */
-  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+  /** states */
+  const [selectedType, setSelectedType] = useState<string | null>(null);
 
   /** handlers */
   const handleNavigate = () => {
-    navigate('');
+    navigate(`/signup/${selectedType}`);
   };
 
   const handleSelect = (e: React.MouseEvent<HTMLButtonElement>) => {
-    setSelectedIndex(parseInt(e.currentTarget.value));
+    setSelectedType(e.currentTarget.value);
   };
 
   return (
     <main className="flex size-full items-center justify-center">
+      {/** 타이틀 */}
       <div className="flex flex-col gap-14">
         <div className="flex flex-col gap-4">
           <h2 className="text-heading-large">가입 유형을 선택해주세요.</h2>
@@ -30,30 +32,18 @@ const SignupTypePage = () => {
         <div className="flex flex-col gap-9">
           <div className="flex flex-col gap-2">
             <p className="text-label-base text-content-secondary">강사로 수업을 제공할게요.</p>
-            <Button
-              value={0}
-              variant="outline"
-              startAdornment={<img src={`/assets/icon/check.svg`} alt="check-icon" className="size-5" />}
-              className="text-label-base text-content-primary"
-              onClick={handleSelect}
-            >
+            <SelectButton value="instructor" isSelected={selectedType === 'instructor'} onClick={handleSelect}>
               강사로 가입하기
-            </Button>
+            </SelectButton>
           </div>
           <div className="flex flex-col gap-2">
             <p className="text-label-base text-content-secondary">레슨장을 운영중이에요.</p>
-            <Button
-              value={1}
-              variant="outline"
-              startAdornment={<img src={`/assets/icon/check.svg`} alt="check-icon" className="size-5" />}
-              className="text-label-base text-content-primary"
-              onClick={handleSelect}
-            >
+            <SelectButton value="studio" isSelected={selectedType === 'studio'} onClick={handleSelect}>
               레슨장으로 가입하기
-            </Button>
+            </SelectButton>
           </div>
         </div>
-        <Button variant="primary" disabled={selectedIndex === null}>
+        <Button variant="primary" size="area" disabled={selectedType === null} onClick={handleNavigate}>
           확인
         </Button>
       </div>

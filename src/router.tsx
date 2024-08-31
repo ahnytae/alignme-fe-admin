@@ -2,8 +2,7 @@ import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 
 import ComponentUiTest from './pages/component-ui-test';
-import SignupTypePage from './pages/auth/sign-up/SignupTypePage';
-import SignupPage from './pages/auth/sign-up/SignupPage';
+import { SignupTypePage, SignupPage } from './pages/auth/sign_up';
 
 const Router = () => {
   return (
