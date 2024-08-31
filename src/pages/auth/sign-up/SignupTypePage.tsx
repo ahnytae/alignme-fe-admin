@@ -1,12 +1,22 @@
-import { useState } from 'react'
-import { Button } from '@/components/ui/button'
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { useNavigate } from 'react-router-dom';
 
-const Signup = () => {
-  const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
+const SignupTypePage = () => {
+  /** HOOKS */
+  const navigate = useNavigate();
+
+  /** STATES */
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+
+  /** handlers */
+  const handleNavigate = () => {
+    navigate('');
+  };
 
   const handleSelect = (e: React.MouseEvent<HTMLButtonElement>) => {
-    setSelectedIndex(parseInt(e.currentTarget.value))
-  }
+    setSelectedIndex(parseInt(e.currentTarget.value));
+  };
 
   return (
     <main className="flex size-full items-center justify-center">
@@ -20,13 +30,25 @@ const Signup = () => {
         <div className="flex flex-col gap-9">
           <div className="flex flex-col gap-2">
             <p className="text-label-base text-content-secondary">강사로 수업을 제공할게요.</p>
-            <Button value={0} variant="outline" className="text-label-base text-content-primary" onClick={handleSelect}>
+            <Button
+              value={0}
+              variant="outline"
+              startAdornment={<img src={`/assets/icon/check.svg`} alt="check-icon" className="size-5" />}
+              className="text-label-base text-content-primary"
+              onClick={handleSelect}
+            >
               강사로 가입하기
             </Button>
           </div>
           <div className="flex flex-col gap-2">
             <p className="text-label-base text-content-secondary">레슨장을 운영중이에요.</p>
-            <Button value={1} variant="outline" className="text-label-base text-content-primary" onClick={handleSelect}>
+            <Button
+              value={1}
+              variant="outline"
+              startAdornment={<img src={`/assets/icon/check.svg`} alt="check-icon" className="size-5" />}
+              className="text-label-base text-content-primary"
+              onClick={handleSelect}
+            >
               레슨장으로 가입하기
             </Button>
           </div>
@@ -36,7 +58,7 @@ const Signup = () => {
         </Button>
       </div>
     </main>
-  )
-}
+  );
+};
 
-export default Signup
+export default SignupTypePage;
