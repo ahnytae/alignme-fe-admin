@@ -7,9 +7,9 @@ import { Button } from '@/components/ui/button';
 
 const formSchema = z.object({
   /** 소속 레슨장 */
-  studioName: z.string().min(1, '소속 레슨장을 입력해주세요.'),
+  studioName: z.string().min(1),
   /** 강사 이름 */
-  name: z.string().min(1, '강사 이름을 입력해주세요.'),
+  name: z.string().min(1),
 });
 
 /** 강사 정보 입력 폼 */
@@ -58,7 +58,13 @@ const InstructorForm = () => {
             </FormItem>
           )}
         />
-        <Button variant="primary" size="area" type="submit" className="mt-3 w-[380px]">
+        <Button
+          variant="primary"
+          size="area"
+          type="submit"
+          className="mt-3 w-[380px] disabled:text-label-base"
+          disabled={!form.formState.isValid}
+        >
           가입 완료
         </Button>
       </form>

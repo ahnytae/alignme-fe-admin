@@ -7,11 +7,11 @@ import { Input } from '@/components/ui/input';
 
 const formSchema = z.object({
   /** 소속 레슨장 */
-  studioName: z.string(),
+  studioName: z.string().min(1),
   /** 지역 지점 */
   location: z.string(),
   /** 대표자명 */
-  name: z.string(),
+  name: z.string().min(1),
   /** 이메일 */
   email: z.string().email(),
 });
@@ -20,6 +20,7 @@ const formSchema = z.object({
 const StudioForm = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
+    mode: 'onChange',
   });
 
   const onSubmit = () => {};
@@ -45,7 +46,7 @@ const StudioForm = () => {
         {/** 지역 지점 */}
         <FormField
           control={form.control}
-          name="name"
+          name="location"
           render={({ field }) => (
             <FormItem>
               <FormLabel>지역 지점</FormLabel>
@@ -75,7 +76,7 @@ const StudioForm = () => {
         {/** 이메일 */}
         <FormField
           control={form.control}
-          name="name"
+          name="email"
           render={({ field }) => (
             <FormItem>
               <FormLabel isRequired={true}>이메일</FormLabel>
@@ -86,7 +87,13 @@ const StudioForm = () => {
             </FormItem>
           )}
         />
-        <Button variant="primary" size="area" type="submit" className="mt-3 w-[380px]">
+        <Button
+          variant="primary"
+          size="area"
+          type="submit"
+          className="mt-3 w-[380px] disabled:text-label-base"
+          disabled={!form.formState.isValid}
+        >
           가입 완료
         </Button>
       </form>
