@@ -1,5 +1,5 @@
 import { useParams } from 'react-router-dom';
-import { InstructorForm, StudioForm } from '../components';
+import { InstructorForm, StudioForm } from './components';
 
 type PageParams = 'instructor' | 'studio';
 

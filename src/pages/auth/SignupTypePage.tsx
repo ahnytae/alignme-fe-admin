@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
-import SelectButton from '../components/SelectButton';
+import SelectButton from './components/SelectButton';
 
 const SignupTypePage = () => {
   /** hooks */
@@ -12,7 +12,7 @@ const SignupTypePage = () => {
 
   /** handlers */
   const handleNavigate = () => {
-    navigate(`/signup/${selectedType}`);
+    navigate(`/signup/${selectedType}/info`);
   };
 
   const handleSelect = (e: React.MouseEvent<HTMLButtonElement>) => {
