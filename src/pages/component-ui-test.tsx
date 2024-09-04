@@ -9,21 +9,21 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '../components/ui/form';
+} from '@/components/ui/form';
 import * as z from 'zod';
 import { useForm } from 'react-hook-form';
-import { Input } from '../components/ui/input';
-import { Textarea } from '../components/ui/textarea';
-import { Checkbox } from '../components/ui/checkbox';
-import { FileInput } from '../components/ui/fileInput';
-import { SearchBar } from '../components/ui/searchBar';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Checkbox } from '@/components/ui/checkbox';
+import { FileInput } from '@/components/ui/fileInput';
+import { SearchBar } from '@/components/ui/searchBar';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '../components/ui/select';
+} from '@/components/ui/select';
 
 // checkbox options 더미 데이터
 const checkOptions = [

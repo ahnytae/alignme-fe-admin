@@ -1,4 +1,4 @@
-import { Input } from './input';
+import { Input } from '@/components/ui/input';
 
 interface SearchBarProps {
   placeholder: string;

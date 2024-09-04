@@ -1,6 +1,6 @@
 import React from 'react';
 import { ChangeEvent, useState } from 'react';
-import { Input } from './input';
+import { Input } from '@/components/ui/input';
 
 export interface FileInputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {}
