@@ -19,7 +19,7 @@ const buttonVariants = cva(
         sm: 'px-3 py-2',
         md: 'text-label-base px-4 py-3',
         lg: 'text-label-large size-4',
-        area: 'w-full px-3 py-3 text-label-base',
+        area: 'w-full h-12 px-3 py-3 text-label-base',
         icon: 'p-0 size-fit',
       },
     },
