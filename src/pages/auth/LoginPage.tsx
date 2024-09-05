@@ -1,11 +1,9 @@
-import { useNavigate } from 'react-router-dom';
 import KaKaoButton from './components/KaKaoButton';
+import { kakaoRedirectUrl } from '@/constant/urls';
 
 const LoginPage = () => {
-  const navigate = useNavigate();
-
   const handleOauth = () => {
-    navigate(`/signup-type`);
+    window.location.replace(kakaoRedirectUrl);
   };
 
   return (
