@@ -5,6 +5,7 @@ import DashboardPage from './pages/dashboard/dashboardPage';
 import DashboardCreatePage from './pages/content/contentCreatePage';
 import DashbordContentDetailPage from './pages/content/contentDetailPage';
 import { SignupTypePage, LoginPage, SignupFormPage } from './pages/auth';
+import MyPage from './pages/myPage/myPage';
 import SuccessAuthRedirectPage from './pages/auth/SuccessAuthRedirectPage';
 
 const Router = () => {
@@ -25,6 +26,9 @@ const Router = () => {
       <Route path="/auth/kakao/success" element={<SuccessAuthRedirectPage />} />
       <Route path="/signup-type" element={<SignupTypePage />} />
       <Route path="/signup/:type/info" element={<SignupFormPage />} />
+
+      {/* 마이페이지 */}
+      <Route path="/my-page" element={<MyPage />} />
     </Routes>
   );
 };
