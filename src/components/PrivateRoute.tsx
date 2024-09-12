@@ -1,8 +1,8 @@
+import useAuthStore from '@/stores/useAuthStore';
 import { Navigate, Outlet } from 'react-router-dom';
 
 const PrivateRoute = () => {
-  // TODO : 전역상태로 변경 필요
-  const isLogin = false;
+  const isLogin = useAuthStore((state) => state.isLogin);
 
   return isLogin ? <Outlet /> : <Navigate to={'/login'} />;
 };
