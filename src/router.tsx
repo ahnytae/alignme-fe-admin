@@ -7,28 +7,30 @@ import DashbordContentDetailPage from './pages/content/contentDetailPage';
 import { SignupTypePage, LoginPage, SignupFormPage } from './pages/auth';
 import MyPage from './pages/myPage/myPage';
 import SuccessAuthRedirectPage from './pages/auth/SuccessAuthRedirectPage';
+import Sidebar from './components/Sidebar';
 
 const Router = () => {
   return (
     <Routes>
       <Route path="/test" element={<ComponentUiTest />} />
+      <Route element={<Sidebar />}>
+        {/* 대시보드 페이지 */}
+        <Route path="/dashboard/content" element={<DashboardPage />} />
+        <Route path="/dashboard/member" element={<DashboardPage />} />
 
-      {/* 대시보드 페이지 */}
-      <Route path="/dashboard/content" element={<DashboardPage />} />
-      <Route path="/dashboard/member" element={<DashboardPage />} />
+        {/* 콘텐츠 페이지 */}
+        <Route path="/dashboard/content/create" element={<DashboardCreatePage />} />
+        <Route path="/dashboard/content/:id" element={<DashbordContentDetailPage />} />
 
-      {/* 콘텐츠 페이지 */}
-      <Route path="/dashboard/content/create" element={<DashboardCreatePage />} />
-      <Route path="/dashboard/content/:id" element={<DashbordContentDetailPage />} />
+        {/* 마이페이지 */}
+        <Route path="/my-page" element={<MyPage />} />
+      </Route>
 
       {/** 회원가입 페이지 */}
       <Route path="/login" element={<LoginPage />} />
       <Route path="/auth/kakao/success" element={<SuccessAuthRedirectPage />} />
       <Route path="/signup-type" element={<SignupTypePage />} />
       <Route path="/signup/:type/info" element={<SignupFormPage />} />
-
-      {/* 마이페이지 */}
-      <Route path="/my-page" element={<MyPage />} />
     </Routes>
   );
 };
