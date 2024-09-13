@@ -35,11 +35,18 @@ export const PATH = {
  * react-router 동적 라우팅 매개변수 주입
  * @example
  * seg('/hello/:type/:id', ['world', 1000]); // '/hello/world/1000'
- * seg(PATH.signup_type_info, [type]); // '/signup/instructor/info'
+ * seg(PATH.signup_type_info, type); // '/signup/instructor/info'
  */
-export const seg = (url: string, params: (string | number)[]) => {
+export const seg = (url: string, params: (string | number) | (string | number)[]) => {
   let index = 0;
-  return url.replace(/:([^/]+)/g, () => {
-    return params[index++].toString() || '';
-  });
+  if (Array.isArray(params)) {
+    return url.replace(/:([^/]+)/g, (subStr) => {
+      if (index < params.length) {
+        return params[index++].toString();
+      }
+      return subStr;
+    });
+  } else {
+    return url.replace(/:([^/]+)/, params.toString());
+  }
 };
