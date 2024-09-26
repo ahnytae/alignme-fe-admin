@@ -4,6 +4,10 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { signUpManager } from '@/api/auth';
+import { useNavigate } from 'react-router-dom';
+import { PATH } from '@/constant/urls';
+import useAuthStore from '@/stores/useAuthStore';
 
 const formSchema = z.object({
   /** 소속 레슨장 */
@@ -12,18 +16,33 @@ const formSchema = z.object({
   location: z.string(),
   /** 대표자명 */
   name: z.string().min(1),
-  /** 이메일 */
-  email: z.string().email(),
 });
 
 /** 레슨장 정보 입력 폼 */
 const StudioForm = () => {
+  const navigate = useNavigate();
+  const setIsLogin = useAuthStore((state) => state.setIsLogin);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     mode: 'onChange',
   });
 
-  const onSubmit = () => {};
+  const onSubmit = async (data: z.infer<typeof formSchema>) => {
+    try {
+      await signUpManager({
+        studioName: data.studioName,
+        studioRegionName: data.location,
+        name: data.name,
+        userRole: 'manager',
+      });
+      // TODO 회원가입 여부 분기 처리
+      setIsLogin(true);
+      navigate(PATH.login);
+    } catch (error) {
+      alert(error);
+    }
+  };
 
   return (
     <Form {...form}>
@@ -73,20 +92,6 @@ const StudioForm = () => {
           )}
         />
 
-        {/** 이메일 */}
-        <FormField
-          control={form.control}
-          name="email"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel isRequired={true}>이메일</FormLabel>
-              <FormDescription>연락받으실 이메일을 입력해주세요.</FormDescription>
-              <FormControl>
-                <Input placeholder="이메일" isError={!!form.formState.errors.name} {...field} />
-              </FormControl>
-            </FormItem>
-          )}
-        />
         <Button
           variant="primary"
           size="area"

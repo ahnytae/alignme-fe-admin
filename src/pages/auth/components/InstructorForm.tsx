@@ -4,6 +4,10 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { signUpInstructor } from '@/api/auth';
+import { useNavigate } from 'react-router-dom';
+import { PATH } from '@/constant/urls';
+import useAuthStore from '@/stores/useAuthStore';
 
 const formSchema = z.object({
   /** 소속 레슨장 */
@@ -14,6 +18,9 @@ const formSchema = z.object({
 
 /** 강사 정보 입력 폼 */
 const InstructorForm = () => {
+  const navigate = useNavigate();
+  const setIsLogin = useAuthStore((state) => state.setIsLogin);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -22,8 +29,15 @@ const InstructorForm = () => {
     },
   });
 
-  const onSubmit = (data: z.infer<typeof formSchema>) => {
-    console.log(data);
+  const onSubmit = async (data: z.infer<typeof formSchema>) => {
+    try {
+      await signUpInstructor({ studioName: data.studioName, name: data.name, userRole: 'instructor' });
+      // TODO 회원가입 여부 분기 처리
+      setIsLogin(true);
+      navigate(PATH.login);
+    } catch (error) {
+      alert(error);
+    }
   };
 
   return (
