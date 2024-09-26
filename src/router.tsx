@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 
 import ComponentUiTest from './pages/component-ui-test';
 import DashboardPage from './pages/dashboard/dashboardPage';
@@ -15,6 +15,7 @@ const Router = () => {
   return (
     <Routes>
       <Route path="/test" element={<ComponentUiTest />} />
+      <Route path="/" element={<Navigate to={PATH.login} />} />
       <Route element={<PrivateRoute />}>
         <Route element={<Sidebar />}>
           {/** 콘텐츠 관리 */}
