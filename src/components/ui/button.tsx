@@ -45,9 +45,9 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     const Comp = asChild ? Slot : 'button';
     return (
       <Comp className={cn(buttonVariants({ variant, size, className }))} ref={ref} {...props}>
-        {startAdornment && <span>{startAdornment}</span>}
+        {startAdornment && startAdornment}
         {children}
-        {endAdornment && <span>{endAdornment}</span>}
+        {endAdornment && endAdornment}
       </Comp>
     );
   },

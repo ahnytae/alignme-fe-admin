@@ -7,32 +7,37 @@ import DashbordContentDetailPage from './pages/content/contentDetailPage';
 import { SignupTypePage, LoginPage, SignupFormPage } from './pages/auth';
 import MyPage from './pages/myPage/myPage';
 import SuccessAuthRedirectPage from './pages/auth/SuccessAuthRedirectPage';
+import Sidebar from './components/Sidebar';
+import { PATH } from './constant/urls';
 import PrivateRoute from './components/PrivateRoute';
 
 const Router = () => {
   return (
     <Routes>
       <Route path="/test" element={<ComponentUiTest />} />
+      <Route element={<Sidebar />}>
+        {/** 콘텐츠 관리 */}
+        <Route path={PATH.content_list} element={<DashboardPage />} />
+        <Route path={PATH.content_create} element={<DashboardCreatePage />} />
+        <Route path={PATH.content_id} element={<DashbordContentDetailPage />} />
 
-      {/* 대시보드 페이지 */}
-      <Route path="/dashboard/content" element={<DashboardPage />} />
-      <Route path="/dashboard/member" element={<DashboardPage />} />
+        {/* 강사 관리 */}
+        <Route path={PATH.instructor_list} element={<div>강사 목록</div>} />
+        <Route path={PATH.instructor_request} element={<div>강사 가입 요청</div>} />
 
-      {/* 콘텐츠 페이지 */}
-      <Route path="/dashboard/content/create" element={<DashboardCreatePage />} />
-      <Route path="/dashboard/content/:id" element={<DashbordContentDetailPage />} />
+        {/* 회원 관리 */}
+        <Route path={PATH.member_list} element={<div>회원 목록</div>} />
+        <Route path={PATH.member_request} element={<div>회원 가입 요청</div>} />
+
+        {/* 마이페이지 */}
+        <Route path={PATH.myPage} element={<MyPage />} />
+      </Route>
 
       {/** 회원가입 페이지 */}
-      <Route path="/login" element={<LoginPage />} />
-      <Route path="/auth/kakao/success" element={<SuccessAuthRedirectPage />} />
-      <Route path="/signup-type" element={<SignupTypePage />} />
-      <Route path="/signup/:type/info" element={<SignupFormPage />} />
-
-      {/* 마이페이지 */}
-      <Route path="/my-page" element={<MyPage />} />
-
-      {/** 로그인이 필요한 페이지 */}
-      <Route element={<PrivateRoute />}></Route>
+      <Route path={PATH.login} element={<LoginPage />} />
+      <Route path={PATH.auth_kakao_success} element={<SuccessAuthRedirectPage />} />
+      <Route path={PATH.signupType} element={<SignupTypePage />} />
+      <Route path={PATH.signup_type_info} element={<SignupFormPage />} />
     </Routes>
   );
 };
