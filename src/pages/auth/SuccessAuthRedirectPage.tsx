@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import api from '@/api/common';
 import { setCookie } from '@/common/cookie';
 import { AuthModel } from '@/model/authModel';
+import useAuthStore from '@/stores/useAuthStore';
 
 export default function SuccessAuthRedirectPage() {
   const navigate = useNavigate();
@@ -10,6 +11,8 @@ export default function SuccessAuthRedirectPage() {
     (async () => {
       try {
         const code = new URL(window.location.href).searchParams.get('code');
+        const setIsLogin = useAuthStore.getState().setIsLogin;
+
         const {
           data: {
             data: { accessToken, refreshToken },
@@ -18,6 +21,9 @@ export default function SuccessAuthRedirectPage() {
 
         setCookie('accessToken', accessToken);
         setCookie('refreshToken', refreshToken);
+
+        // 로그인 상태 변경
+        setIsLogin(true);
 
         navigate('/signup-type');
       } catch (error) {

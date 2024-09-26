@@ -9,6 +9,7 @@ import MyPage from './pages/myPage/myPage';
 import SuccessAuthRedirectPage from './pages/auth/SuccessAuthRedirectPage';
 import Sidebar from './components/Sidebar';
 import { PATH } from './constant/urls';
+import PrivateRoute from './components/PrivateRoute';
 
 const Router = () => {
   return (
