@@ -1,5 +1,37 @@
+import { useLayoutEffect } from 'react';
 import Router from './router';
+import { getCookie, setCookie } from './common/cookie';
+import useAuthStore from './stores/useAuthStore';
+import api from './api/common';
+
+type TokenRefresh = { accessToken: string; refreshToken: string };
+
 function App() {
+  useLayoutEffect(() => {
+    const { isLogin, setIsLogin, setIsLoading } = useAuthStore.getState();
+
+    const refreshToken = getCookie('refreshToken');
+    if (isLogin || !refreshToken) return;
+
+    const refreshTokens = async () => {
+      const { data } = await api.post<TokenRefresh>('/auth/refresh', { refreshToken });
+      return data;
+    };
+
+    try {
+      setIsLoading(true);
+      (async () => {
+        const { accessToken, refreshToken } = await refreshTokens();
+        setCookie('accessToken', accessToken);
+        setCookie('refreshToken', refreshToken);
+        setIsLogin(true);
+        setIsLoading(false);
+      })();
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
+
   return (
     <>
       <Router />

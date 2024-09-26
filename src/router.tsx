@@ -15,22 +15,24 @@ const Router = () => {
   return (
     <Routes>
       <Route path="/test" element={<ComponentUiTest />} />
-      <Route element={<Sidebar />}>
-        {/** 콘텐츠 관리 */}
-        <Route path={PATH.content_list} element={<DashboardPage />} />
-        <Route path={PATH.content_create} element={<DashboardCreatePage />} />
-        <Route path={PATH.content_id} element={<DashbordContentDetailPage />} />
+      <Route element={<PrivateRoute />}>
+        <Route element={<Sidebar />}>
+          {/** 콘텐츠 관리 */}
+          <Route path={PATH.content_list} element={<DashboardPage />} />
+          <Route path={PATH.content_create} element={<DashboardCreatePage />} />
+          <Route path={PATH.content_id} element={<DashbordContentDetailPage />} />
 
-        {/* 강사 관리 */}
-        <Route path={PATH.instructor_list} element={<div>강사 목록</div>} />
-        <Route path={PATH.instructor_request} element={<div>강사 가입 요청</div>} />
+          {/* 강사 관리 */}
+          <Route path={PATH.instructor_list} element={<div>강사 목록</div>} />
+          <Route path={PATH.instructor_request} element={<div>강사 가입 요청</div>} />
 
-        {/* 회원 관리 */}
-        <Route path={PATH.member_list} element={<div>회원 목록</div>} />
-        <Route path={PATH.member_request} element={<div>회원 가입 요청</div>} />
+          {/* 회원 관리 */}
+          <Route path={PATH.member_list} element={<div>회원 목록</div>} />
+          <Route path={PATH.member_request} element={<div>회원 가입 요청</div>} />
 
-        {/* 마이페이지 */}
-        <Route path={PATH.myPage} element={<MyPage />} />
+          {/* 마이페이지 */}
+          <Route path={PATH.myPage} element={<MyPage />} />
+        </Route>
       </Route>
 
       {/** 회원가입 페이지 */}
