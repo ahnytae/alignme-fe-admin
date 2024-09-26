@@ -1,7 +1,6 @@
-export type UserRole = 'mananger' | 'instructor';
+export type UserRole = 'manager' | 'instructor';
 
 export type SignUpReq = {
-  kakaoMemberId: string;
   studioName: string;
   studioRegionName: string;
   name: string;
