@@ -7,6 +7,7 @@ import DashbordContentDetailPage from './pages/content/contentDetailPage';
 import { SignupTypePage, LoginPage, SignupFormPage } from './pages/auth';
 import MyPage from './pages/myPage/myPage';
 import SuccessAuthRedirectPage from './pages/auth/SuccessAuthRedirectPage';
+import PrivateRoute from './components/PrivateRoute';
 
 const Router = () => {
   return (
@@ -29,6 +30,9 @@ const Router = () => {
 
       {/* 마이페이지 */}
       <Route path="/my-page" element={<MyPage />} />
+
+      {/** 로그인이 필요한 페이지 */}
+      <Route element={<PrivateRoute />}></Route>
     </Routes>
   );
 };
