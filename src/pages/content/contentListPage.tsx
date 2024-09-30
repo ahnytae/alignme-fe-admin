@@ -1,17 +1,19 @@
 import { Button } from '@/components/ui/button';
 import { Link, useNavigate } from 'react-router-dom';
 import { Plus } from 'lucide-react';
-import { ContentCard } from './contentCard';
+import { ContentCard } from './components/contentCard';
 import { FunctionComponent, HTMLAttributes } from 'react';
+import PageTitle from '@/components/PageTitle';
 
 interface ContentProps extends HTMLAttributes<HTMLDivElement> {}
-const ContentList: FunctionComponent<ContentProps> = () => {
+const ContentListPage: FunctionComponent<ContentProps> = () => {
   const navigate = useNavigate();
   const clickContentCard = (id: number) => {
-    navigate('/dashboard/content/' + id);
+    navigate('/content/' + id);
   };
   return (
-    <>
+    <div className="mx-5 max-w-[846px] sm:mx-auto">
+      <PageTitle>내 콘텐츠 관리</PageTitle>
       <div className="flex items-center justify-between">
         <div className="text-paragraph-tiny text-content-secondary">
           총 <span className="text-content-primary">123</span>개
@@ -22,7 +24,7 @@ const ContentList: FunctionComponent<ContentProps> = () => {
           className="gap-2"
           startAdornment={<Plus className="h-4 w-4 text-white" />}
         >
-          <Link to="/dashboard/content/create">새 콘텐츠 등록</Link>
+          <Link to="/content/create">새 콘텐츠 등록</Link>
         </Button>
       </div>
 
@@ -32,8 +34,8 @@ const ContentList: FunctionComponent<ContentProps> = () => {
           <ContentCard key={i} onClick={() => clickContentCard(i)} />
         ))}
       </div>
-    </>
+    </div>
   );
 };
 
-export { ContentList };
+export default ContentListPage;
