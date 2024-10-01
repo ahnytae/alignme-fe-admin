@@ -1,15 +1,22 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 
 import ComponentUiTest from './pages/component-ui-test';
-import DashboardPage from './pages/dashboard/dashboardPage';
-import DashboardCreatePage from './pages/content/contentCreatePage';
-import DashbordContentDetailPage from './pages/content/contentDetailPage';
+import ContentListPage from './pages/content/contentListPage';
+import ContentCreatePage from './pages/content/contentCreatePage';
+import ContentDetailPage from './pages/content/contentDetailPage';
+
+import InstructorListPage from './pages/instructor/instructorListPage';
+import InstructorRequestPage from './pages/instructor/instructorRequestPage';
+
+import MemberListPage from './pages/member/memberListPage';
+import MemberRequestPage from './pages/member/memberRequestPage';
+
 import { SignupTypePage, LoginPage, SignupFormPage } from './pages/auth';
 import MyPage from './pages/myPage/myPage';
 import SuccessAuthRedirectPage from './pages/auth/SuccessAuthRedirectPage';
 import Sidebar from './components/Sidebar';
 import { PATH } from './constant/urls';
-import PrivateRoute from './components/PrivateRoute';
+import PrivateRoute from '@/components/PrivateRoute';
 
 const Router = () => {
   return (
@@ -19,17 +26,17 @@ const Router = () => {
       <Route element={<PrivateRoute />}>
         <Route element={<Sidebar />}>
           {/** 콘텐츠 관리 */}
-          <Route path={PATH.content_list} element={<DashboardPage />} />
-          <Route path={PATH.content_create} element={<DashboardCreatePage />} />
-          <Route path={PATH.content_id} element={<DashbordContentDetailPage />} />
+          <Route path={PATH.content_list} element={<ContentListPage />} />
+          <Route path={PATH.content_create} element={<ContentCreatePage />} />
+          <Route path={PATH.content_id} element={<ContentDetailPage />} />
 
           {/* 강사 관리 */}
-          <Route path={PATH.instructor_list} element={<div>강사 목록</div>} />
-          <Route path={PATH.instructor_request} element={<div>강사 가입 요청</div>} />
+          <Route path={PATH.instructor_list} element={<InstructorListPage />} />
+          <Route path={PATH.instructor_request} element={<InstructorRequestPage />} />
 
           {/* 회원 관리 */}
-          <Route path={PATH.member_list} element={<div>회원 목록</div>} />
-          <Route path={PATH.member_request} element={<div>회원 가입 요청</div>} />
+          <Route path={PATH.member_list} element={<MemberListPage />} />
+          <Route path={PATH.member_request} element={<MemberRequestPage />} />
 
           {/* 마이페이지 */}
           <Route path={PATH.myPage} element={<MyPage />} />
