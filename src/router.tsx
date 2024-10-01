@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 
 import ComponentUiTest from './pages/component-ui-test';
 import ContentListPage from './pages/content/contentListPage';
@@ -22,22 +22,25 @@ const Router = () => {
   return (
     <Routes>
       <Route path="/test" element={<ComponentUiTest />} />
-      <Route element={<Sidebar />}>
-        {/** 콘텐츠 관리 */}
-        <Route path={PATH.content_list} element={<ContentListPage />} />
-        <Route path={PATH.content_create} element={<ContentCreatePage />} />
-        <Route path={PATH.content_id} element={<ContentDetailPage />} />
+      <Route path="/" element={<Navigate to={PATH.login} />} />
+      <Route element={<PrivateRoute />}>
+        <Route element={<Sidebar />}>
+          {/** 콘텐츠 관리 */}
+          <Route path={PATH.content_list} element={<ContentListPage />} />
+          <Route path={PATH.content_create} element={<ContentCreatePage />} />
+          <Route path={PATH.content_id} element={<ContentDetailPage />} />
 
-        {/* 강사 관리 */}
-        <Route path={PATH.instructor_list} element={<InstructorListPage />} />
-        <Route path={PATH.instructor_request} element={<InstructorRequestPage />} />
+          {/* 강사 관리 */}
+          <Route path={PATH.instructor_list} element={<InstructorListPage />} />
+          <Route path={PATH.instructor_request} element={<InstructorRequestPage />} />
 
-        {/* 회원 관리 */}
-        <Route path={PATH.member_list} element={<MemberListPage />} />
-        <Route path={PATH.member_request} element={<MemberRequestPage />} />
+          {/* 회원 관리 */}
+          <Route path={PATH.member_list} element={<MemberListPage />} />
+          <Route path={PATH.member_request} element={<MemberRequestPage />} />
 
-        {/* 마이페이지 */}
-        <Route path={PATH.myPage} element={<MyPage />} />
+          {/* 마이페이지 */}
+          <Route path={PATH.myPage} element={<MyPage />} />
+        </Route>
       </Route>
 
       {/** 회원가입 페이지 */}

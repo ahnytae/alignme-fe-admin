@@ -1,5 +1,55 @@
+import { useLayoutEffect } from 'react';
 import Router from './router';
+import { getCookie, removeCookie, setCookie } from './common/cookie';
+import useAuthStore from './stores/useAuthStore';
+import axios from 'axios';
+
+type TokenRefresh = { accessToken: string; refreshToken: string };
+
 function App() {
+  useLayoutEffect(() => {
+    const { isLogin, setIsLogin, setIsLoading } = useAuthStore.getState();
+
+    const accessToken = getCookie('accessToken');
+    const refreshToken = getCookie('refreshToken');
+    if (isLogin || !refreshToken) return;
+
+    // 토큰 갱신
+    const refreshTokens = async () => {
+      const { data } = await axios.post<TokenRefresh>(
+        '/auth/refresh',
+        { refreshToken },
+        {
+          baseURL: process.env.REACT_APP_BASE_API_URL,
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+        },
+      );
+      return data;
+    };
+
+    // 자동 로그인
+    const autoLogin = async () => {
+      try {
+        setIsLoading(true);
+        const { accessToken, refreshToken } = await refreshTokens();
+        setCookie('accessToken', accessToken);
+        setCookie('refreshToken', refreshToken);
+        setIsLogin(true);
+      } catch (error) {
+        removeCookie('accessToken');
+        removeCookie('refreshToken');
+        console.log(error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    autoLogin();
+  }, []);
+
   return (
     <>
       <Router />
