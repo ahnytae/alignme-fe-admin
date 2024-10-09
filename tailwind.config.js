@@ -15,6 +15,11 @@ module.exports = {
       fontFamily: {
         sora: ['Sora', 'sans-serif'],
       },
+      screens: {
+        desktop: { max: '1200px' }, // 데스크탑 스타일
+        tablet: { max: '744px' }, // 태블릿 스타일
+        mobile: { max: '375px' }, // 모바일 스타일
+      },
       colors: {
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',

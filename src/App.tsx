@@ -7,14 +7,20 @@ import axios from 'axios';
 type TokenRefresh = { accessToken: string; refreshToken: string };
 
 function App() {
-  useLayoutEffect(() => {
-    const { isLogin, setIsLogin, setIsLoading } = useAuthStore.getState();
+  const { isLogin, setIsLogin, setIsLoading } = useAuthStore((state) => ({
+    isLogin: state.isLogin,
+    setIsLogin: state.setIsLogin,
+    setIsLoading: state.setIsLoading,
+  }));
 
+  useLayoutEffect(() => {
     const accessToken = getCookie('accessToken');
     const refreshToken = getCookie('refreshToken');
+
+    // 사용자가 로그인 상태이거나 refreshToken이 없으면 자동 로그인 실행 안함
     if (isLogin || !refreshToken) return;
 
-    // 토큰 갱신
+    // 토큰 갱신 함수
     const refreshTokens = async () => {
       const { data } = await axios.post<TokenRefresh>(
         '/auth/refresh',
@@ -30,10 +36,9 @@ function App() {
       return data;
     };
 
-    // 자동 로그인
+    // 자동 로그인 함수
     const autoLogin = async () => {
       try {
-        setIsLoading(true);
         const { accessToken, refreshToken } = await refreshTokens();
         setCookie('accessToken', accessToken);
         setCookie('refreshToken', refreshToken);
@@ -48,7 +53,7 @@ function App() {
     };
 
     autoLogin();
-  }, []);
+  }, [isLogin, setIsLogin, setIsLoading]);
 
   return (
     <>
@@ -71,3 +76,7 @@ function App() {
 }
 
 export default App;
+
+// eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3Mjc5MzM0NzYsImV4cCI6MTcyODUzODI3Nn0.rqJF8YdfRxZlWXn5VrPRa3M4X5DAuoHbsll8Ie_stAk
+
+// eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjM3MDI2MDczODQsImVtYWlsIjoic29rODk0MEBuYXZlci5jb20iLCJuYW1lIjoi6rmA7Iuc7JioIiwiaWF0IjoxNzI3OTMzNDg1LCJleHAiOjE3Mjg1MzgyODV9.UoPr1QDfubjRRGq7mjh7pp4XunKOYMjZTaKAoRYsclI

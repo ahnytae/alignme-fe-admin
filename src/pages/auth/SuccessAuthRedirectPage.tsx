@@ -8,11 +8,16 @@ import { PATH } from '@/constant/urls';
 
 export default function SuccessAuthRedirectPage() {
   const navigate = useNavigate();
+
+  const { setIsLogin, setIsLoading } = useAuthStore((state) => ({
+    setIsLogin: state.setIsLogin,
+    setIsLoading: state.setIsLoading,
+  }));
+
   useEffect(() => {
     (async () => {
       try {
         const code = new URL(window.location.href).searchParams.get('code');
-        const setIsLogin = useAuthStore.getState().setIsLogin;
 
         const {
           data: {
@@ -22,9 +27,12 @@ export default function SuccessAuthRedirectPage() {
 
         setCookie('accessToken', accessToken);
         setCookie('refreshToken', refreshToken);
+        setIsLogin(true);
+        setIsLoading(false);
 
         if (isAleradyUser) {
           setIsLogin(true);
+          setIsLoading(false);
           navigate(PATH.content_list);
         } else {
           navigate('/signup-type');
@@ -33,7 +41,8 @@ export default function SuccessAuthRedirectPage() {
         console.error(error);
       }
     })();
-  }, []);
+  }, [navigate, setIsLogin]);
+
   // Todo: 로딩 스피너 추가
   return <div />;
 }

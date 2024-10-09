@@ -9,7 +9,7 @@ interface AuthStore {
 
 const useAuthStore = create<AuthStore>((set) => ({
   isLogin: false,
-  isLoading: false,
+  isLoading: true,
   setIsLogin: (flag) => set({ isLogin: flag }),
   setIsLoading: (flag) => set({ isLoading: flag }),
 }));
