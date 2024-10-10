@@ -1,10 +1,21 @@
 interface AuthModel {
+  message: string;
   data: {
+    isAleradyUser: true;
     accessToken: string;
     refreshToken: string;
-    isAleradyUser: boolean;
-    kakaoMemberId: number;
+    kakaoMemberId: string;
+    email: string;
+    name: string;
   };
 }
 
-export type { AuthModel };
+interface SignUpInstructorResponse {
+  instructorId: string;
+}
+
+interface SignUpManagerResponse {
+  managerId: string;
+}
+
+export type { AuthModel, SignUpInstructorResponse, SignUpManagerResponse };

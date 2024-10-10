@@ -1,4 +1,4 @@
-import { memo, useEffect, useState } from 'react';
+import { memo, useState } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import { Button } from './ui/button';
 import { Link } from 'react-router-dom';
@@ -6,6 +6,7 @@ import { AlignJustify, StickyNote, TicketCheck, UsersRound } from 'lucide-react'
 import { PATH } from '@/constant/urls';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from './ui/accordion';
 import { Sheet, SheetContent, SheetTrigger } from './ui/sheet';
+import useUserStore, { UserRole } from '@/stores/useUserStore';
 
 type Menu = { title: string; to: string; icon: JSX.Element };
 
@@ -40,13 +41,24 @@ const tabList: TabList = {
 
 const Sidebar = () => {
   const { pathname } = useLocation();
+  const { role } = useUserStore();
 
   const [openedCategory, setOpenedCategory] = useState<string[]>(() => [pathname.split('/')[1]]);
+
+  const getFilteredTabList = (userRole: UserRole): TabList => {
+    if (userRole === UserRole.INSTRUCTOR) {
+      const { instructor, ...rest } = tabList;
+      return rest;
+    }
+    return tabList;
+  };
+
+  const filteredTabList = getFilteredTabList(role);
 
   const Menu = memo(() => {
     return (
       <Accordion type="multiple" defaultValue={openedCategory} onValueChange={(value) => setOpenedCategory(value)}>
-        {Object.entries(tabList).map(([domain, tab]) => (
+        {Object.entries(filteredTabList).map(([domain, tab]) => (
           <AccordionItem key={domain} value={domain}>
             {/** 카테고리 */}
             <AccordionTrigger className="text-label-small text-content-primary">{tab.categoryName}</AccordionTrigger>

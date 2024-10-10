@@ -8,6 +8,7 @@ import { signUpInstructor } from '@/api/auth';
 import { useNavigate } from 'react-router-dom';
 import { PATH } from '@/constant/urls';
 import useAuthStore from '@/stores/useAuthStore';
+import useUserStore, { UserRole } from '@/stores/useUserStore';
 
 const formSchema = z.object({
   /** 소속 레슨장 */
@@ -20,6 +21,8 @@ const formSchema = z.object({
 const InstructorForm = () => {
   const navigate = useNavigate();
   const setIsLogin = useAuthStore((state) => state.setIsLogin);
+  const updateUserId = useUserStore((state) => state.setUserId);
+  const updateUserRole = useUserStore((state) => state.setUserRole);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -31,10 +34,13 @@ const InstructorForm = () => {
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     try {
-      await signUpInstructor({ studioName: data.studioName, name: data.name, userRole: 'instructor' });
+      const response = await signUpInstructor({ studioName: data.studioName, name: data.name });
+      updateUserId(response.data.instructorId);
+      updateUserRole(UserRole.INSTRUCTOR);
+
       // TODO 회원가입 여부 분기 처리
       setIsLogin(true);
-      navigate(PATH.login);
+      navigate(PATH.content_list);
     } catch (error) {
       alert(error);
     }

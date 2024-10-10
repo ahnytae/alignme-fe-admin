@@ -1,4 +1,4 @@
-import { FunctionComponent, HTMLAttributes } from 'react';
+import { FunctionComponent, HTMLAttributes, useEffect, useState } from 'react';
 import {
   UserCardWrapper,
   UserCardAvatar,
@@ -10,8 +10,20 @@ import PageTitle from '@/components/PageTitle';
 import { Button } from '@/components/ui/button';
 import InstructorChangeDialog from './components/InstructorChangeDialog';
 import RemoveUserDialog from '@/components/dialog/removeUserDialog';
+import { getInstructorOnUsers } from '@/api/users';
 interface MemberListProps extends HTMLAttributes<HTMLDivElement> {}
 const MemberListPage: FunctionComponent<MemberListProps> = () => {
+  const [users, setUsers] = useState<any>([]);
+
+  useEffect(() => {
+    (async () => {
+      const { data } = await getInstructorOnUsers();
+      setUsers(data.data.users);
+    })();
+  }, []);
+
+  if (!users) return <div>Loading...</div>;
+
   return (
     <div className="mx-5 max-w-[846px] sm:mx-auto">
       <PageTitle>회원 목록</PageTitle>
@@ -21,11 +33,16 @@ const MemberListPage: FunctionComponent<MemberListProps> = () => {
 
       {/* User card 구역 */}
       <div className="mt-4 grid grid-cols-1 gap-5">
-        {[...Array(10)].map((_, i) => (
-          <UserCardWrapper>
+        {users.map((user: any, i: number) => (
+          <UserCardWrapper key={user.kakaoMemberId + i}>
             <UserCardLeft>
               <UserCardAvatar img={''} />
-              <UserCardDetails name={'name'} subLabel="승인일" subText={'date'} additionalInfo={'000선생님'} />
+              <UserCardDetails
+                name={`user.user.name`}
+                subLabel="승인일"
+                subText={new Date(user.createdAt).toLocaleDateString()}
+                additionalInfo={`${user.instructor.name} 강사님`}
+              />
             </UserCardLeft>
             {/* role = manager만 (추후 처리) */}
             <UserCardRight>
@@ -34,7 +51,7 @@ const MemberListPage: FunctionComponent<MemberListProps> = () => {
                   소속강사 변경
                 </Button>
               </InstructorChangeDialog>
-              <RemoveUserDialog userId={i} username={'김아무개'} type="member">
+              <RemoveUserDialog userId={user.kakaoMemberId} username={user.name} type="member">
                 <Button size="sm" className="w-full sm:w-auto">
                   내보내기
                 </Button>

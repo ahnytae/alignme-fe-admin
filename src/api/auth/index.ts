@@ -1,6 +1,6 @@
 import api from '../common';
 import { SignUpReq } from '@/types/signup';
-import { AuthModel } from '@/model/authModel';
+import { AuthModel, SignUpInstructorResponse, SignUpManagerResponse } from '@/model/authModel';
 
 /** 로그인 API */
 export const login = async (code: string) => {
@@ -9,10 +9,10 @@ export const login = async (code: string) => {
 
 /** 강사 회원가입 API */
 export const signUpInstructor = async (params: Omit<SignUpReq, 'studioRegionName'>) => {
-  return await api.post('/profile/signup-instructor', params);
+  return await api.post<SignUpInstructorResponse>('/users/signup-instructor', params);
 };
 
 /** 관리자 회원가입 API */
 export const signUpManager = async (params: SignUpReq) => {
-  return await api.post('/profile/signup-manager', params);
+  return await api.post<SignUpManagerResponse>('/users/signup-manager', params);
 };
