@@ -4,7 +4,7 @@ import { AuthModel, SignUpInstructorResponse, SignUpManagerResponse } from '@/mo
 
 /** 로그인 API */
 export const login = async (code: string) => {
-  return await api.get<AuthModel>(`/auth/user/login/kakao/access?code=${code}`);
+  return await api.get<AuthModel>(`/auth/user/login?code=${code}`);
 };
 
 /** 강사 회원가입 API */

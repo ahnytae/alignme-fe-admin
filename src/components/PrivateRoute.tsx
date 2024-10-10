@@ -3,12 +3,8 @@ import useAuthStore from '@/stores/useAuthStore';
 import { Navigate, Outlet } from 'react-router-dom';
 
 const PrivateRoute = () => {
-  const { isLogin, isLoading } = useAuthStore((state) => ({ isLogin: state.isLogin, isLoading: state.isLoading }));
-
-  if (isLoading) {
-    return <div>login,,,</div>;
-  }
-
+  const { isLogin } = useAuthStore((state) => ({ isLogin: state.isLogin, isLoading: state.isLoading }));
+  console.log('d', isLogin);
   return isLogin ? <Outlet /> : <Navigate to={PATH.login} />;
 };
 

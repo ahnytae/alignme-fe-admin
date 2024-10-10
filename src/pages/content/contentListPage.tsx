@@ -20,6 +20,7 @@ const ContentListPage: FunctionComponent<ContentProps> = () => {
   const clickContentCard = (id: number) => {
     navigate('/content/' + id);
   };
+
   return (
     <div className="mx-5 max-w-[846px] sm:mx-auto">
       <PageTitle>내 콘텐츠 관리</PageTitle>

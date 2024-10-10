@@ -1,12 +1,12 @@
 interface AuthModel {
   message: string;
   data: {
-    isAleradyUser: true;
     accessToken: string;
     refreshToken: string;
     kakaoMemberId: string;
     email: string;
     name: string;
+    isAlerady: boolean;
   };
 }
 

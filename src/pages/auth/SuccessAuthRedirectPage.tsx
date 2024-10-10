@@ -23,9 +23,9 @@ export default function SuccessAuthRedirectPage() {
 
         const {
           data: {
-            data: { accessToken, refreshToken, isAleradyUser, kakaoMemberId, email, name },
+            data: { accessToken, refreshToken, isAlerady, kakaoMemberId, email, name },
           },
-        } = await api.get<AuthModel>(`/auth/user/login/kakao/access?code=${code}`);
+        } = await api.get<AuthModel>(`/auth/user/login?code=${code}`);
 
         setEmail(email);
         setUserName(name);
@@ -36,7 +36,7 @@ export default function SuccessAuthRedirectPage() {
         setIsLogin(true);
         setIsLoading(false);
 
-        if (isAleradyUser) {
+        if (isAlerady) {
           setIsLogin(true);
           setIsLoading(false);
           navigate(PATH.content_list);
