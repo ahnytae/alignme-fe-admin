@@ -59,11 +59,12 @@ const UserCardDetails: React.FC<UserCardDetailsProps> = ({ name, subText, subLab
 // 오른쪽 영역 컴포넌트
 interface UserCardRightProps {
   children?: React.ReactNode;
+  onClick?: () => void;
 }
 
-const UserCardRight: React.FC<UserCardRightProps> = ({ children }) => {
+const UserCardRight: React.FC<UserCardRightProps> = ({ children, onClick }) => {
   return (
-    <div className="">
+    <div className="" onClick={onClick}>
       <div className="flex w-full gap-2">{children}</div>
     </div>
   );

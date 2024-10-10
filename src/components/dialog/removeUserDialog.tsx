@@ -4,18 +4,20 @@ import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, Dialog
 
 interface UserOutDialogProps {
   children: React.ReactNode;
-  userId: number;
+  userId: string;
   username: string;
   type: 'member' | 'instructor'; // member: 회원, instructor: 강사
+  onSubmit?: (userId: string) => void;
 }
 
-const RemoveUserDialog = ({ children, userId, username, type }: UserOutDialogProps) => {
+const RemoveUserDialog = ({ children, userId, username, type, onSubmit }: UserOutDialogProps) => {
   const typeText = type === 'member' ? '회원' : '강사';
 
   const [isOpen, setIsOpen] = useState(false);
   const onClose = () => setIsOpen(false);
 
-  const handlerSubmit = () => {
+  const handlerSubmit = (userId: string) => {
+    onSubmit && onSubmit(userId);
     onClose();
   };
   const openDialog = () => {
@@ -41,7 +43,7 @@ const RemoveUserDialog = ({ children, userId, username, type }: UserOutDialogPro
           <Button size="sm" className="w-full" variant="outline" onClick={onClose}>
             취소
           </Button>
-          <Button size="sm" className="w-full" onClick={handlerSubmit}>
+          <Button size="sm" className="w-full" onClick={() => handlerSubmit(userId)}>
             확인
           </Button>
         </DialogFooter>

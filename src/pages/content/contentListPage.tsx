@@ -2,11 +2,20 @@ import { Button } from '@/components/ui/button';
 import { Link, useNavigate } from 'react-router-dom';
 import { Plus } from 'lucide-react';
 import { ContentCard } from './components/contentCard';
-import { FunctionComponent, HTMLAttributes } from 'react';
+import { FunctionComponent, HTMLAttributes, useEffect } from 'react';
 import PageTitle from '@/components/PageTitle';
+import useUserStore from '@/stores/useUserStore';
+import useAuthStore from '@/stores/useAuthStore';
 
 interface ContentProps extends HTMLAttributes<HTMLDivElement> {}
 const ContentListPage: FunctionComponent<ContentProps> = () => {
+  const userData = useUserStore();
+  const authData = useAuthStore();
+
+  useEffect(() => {
+    console.log('userData:', userData);
+    console.log('authData:', authData);
+  }, []);
   const navigate = useNavigate();
   const clickContentCard = (id: number) => {
     navigate('/content/' + id);

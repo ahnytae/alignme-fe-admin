@@ -3,11 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import api from '@/api/common';
 import { setCookie } from '@/common/cookie';
 import { AuthModel } from '@/model/authModel';
-import useAuthStore from '@/stores/useAuthStore';
 import { PATH } from '@/constant/urls';
+import useUserStore from '@/stores/useUserStore';
+import useAuthStore from '@/stores/useAuthStore';
 
 export default function SuccessAuthRedirectPage() {
   const navigate = useNavigate();
+  const { setKakaoMemberId, setEmail, setUserName } = useUserStore();
 
   const { setIsLogin, setIsLoading } = useAuthStore((state) => ({
     setIsLogin: state.setIsLogin,
@@ -21,9 +23,13 @@ export default function SuccessAuthRedirectPage() {
 
         const {
           data: {
-            data: { accessToken, refreshToken, isAleradyUser },
+            data: { accessToken, refreshToken, isAleradyUser, kakaoMemberId, email, name },
           },
         } = await api.get<AuthModel>(`/auth/user/login/kakao/access?code=${code}`);
+
+        setEmail(email);
+        setUserName(name);
+        setKakaoMemberId(kakaoMemberId);
 
         setCookie('accessToken', accessToken);
         setCookie('refreshToken', refreshToken);
