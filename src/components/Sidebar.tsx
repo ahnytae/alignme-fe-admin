@@ -1,4 +1,4 @@
-import { memo, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import { Button } from './ui/button';
 import { Link } from 'react-router-dom';
@@ -41,11 +41,11 @@ const tabList: TabList = {
 const Sidebar = () => {
   const { pathname } = useLocation();
 
-  const [openedCategory] = useState(() => pathname.split('/')[1]);
+  const [openedCategory, setOpenedCategory] = useState<string[]>(() => [pathname.split('/')[1]]);
 
   const Menu = memo(() => {
     return (
-      <Accordion type="multiple" defaultValue={[openedCategory]}>
+      <Accordion type="multiple" defaultValue={openedCategory} onValueChange={(value) => setOpenedCategory(value)}>
         {Object.entries(tabList).map(([domain, tab]) => (
           <AccordionItem key={domain} value={domain}>
             {/** 카테고리 */}
@@ -74,9 +74,9 @@ const Sidebar = () => {
   return (
     <div className="flex size-full">
       {/** 사이드 바 */}
-      <div className="mobile:w-fit flex h-full w-[240px] flex-col overflow-y-auto border-r-[1px] px-5 py-10">
+      <div className="flex h-full w-[240px] flex-col overflow-y-auto border-r-[1px] px-5 py-10 mobile:w-fit">
         <Sheet>
-          <SheetTrigger className="mobile:block hidden">
+          <SheetTrigger className="hidden mobile:block">
             <AlignJustify />
           </SheetTrigger>
           <SheetContent side="left">
