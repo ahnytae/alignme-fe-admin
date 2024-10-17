@@ -47,7 +47,7 @@ const Sidebar = () => {
 
   const getFilteredTabList = (userRole: UserRole): TabList => {
     if (userRole === UserRole.INSTRUCTOR) {
-      const { instructor, ...rest } = tabList;
+      const { instructor, member, ...rest } = tabList;
       return rest;
     }
     return tabList;

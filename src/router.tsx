@@ -5,9 +5,6 @@ import ContentListPage from './pages/content/contentListPage';
 import ContentCreatePage from './pages/content/contentCreatePage';
 import ContentDetailPage from './pages/content/contentDetailPage';
 
-import InstructorListPage from './pages/instructor/instructorListPage';
-import InstructorRequestPage from './pages/instructor/instructorRequestPage';
-
 import MemberListPage from './pages/member/memberListPage';
 import MemberRequestPage from './pages/member/memberRequestPage';
 
@@ -17,6 +14,8 @@ import SuccessAuthRedirectPage from './pages/auth/SuccessAuthRedirectPage';
 import Sidebar from './components/Sidebar';
 import { PATH } from './constant/urls';
 import PrivateRoute from '@/components/PrivateRoute';
+import InstructorRequestPage from './pages/instructor/InstructorRequestPage';
+import InstructorListPage from './pages/instructor/InstructorListPage';
 
 const Router = () => {
   return (
@@ -27,8 +26,9 @@ const Router = () => {
         <Route element={<Sidebar />}>
           {/** 콘텐츠 관리 */}
           <Route path={PATH.content_list} element={<ContentListPage />} />
-          <Route path={PATH.content_create} element={<ContentCreatePage />} />
+          <Route path={PATH.content_create} element={<ContentCreatePage isEditMode={false} />} />
           <Route path={PATH.content_id} element={<ContentDetailPage />} />
+          <Route path={PATH.content_edit} element={<ContentCreatePage isEditMode={true} />} />
 
           {/* 강사 관리 */}
           <Route path={PATH.instructor_list} element={<InstructorListPage />} />

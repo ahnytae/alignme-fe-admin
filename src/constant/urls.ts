@@ -1,12 +1,16 @@
 export const kakaoRedirectUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.REACT_APP_KAKAO_CLIENT_ID}&redirect_uri=${process.env.REACT_APP_KAKAO_REDIRECT_URI}&response_type=code`;
 
 export const PATH = {
+  /** 콘텐츠 */
+  content: '/content',
   /** 내 콘텐츠 */
   content_list: '/content/list',
   /** 콘텐츠 생성 */
   content_create: '/content/create',
   /** 콘텐츠 상세정보 */
   content_id: '/content/:id',
+  /** 콘텐츠 수정 */
+  content_edit: '/content/:id/edit',
 
   /** 강사 목록 */
   instructor_list: '/instructor/list',

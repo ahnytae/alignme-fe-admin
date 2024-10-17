@@ -1,3 +1,5 @@
+import { User } from "./userModel";
+
 interface AuthModel {
   message: string;
   data: {
@@ -18,4 +20,9 @@ interface SignUpManagerResponse {
   managerId: string;
 }
 
-export type { AuthModel, SignUpInstructorResponse, SignUpManagerResponse };
+interface AutoLoginResponse {
+  isExpired: boolean;
+  user: User;
+}
+
+export type { AuthModel, SignUpInstructorResponse, SignUpManagerResponse, AutoLoginResponse };

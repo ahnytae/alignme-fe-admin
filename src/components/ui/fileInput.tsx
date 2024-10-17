@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { ChangeEvent, useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { getImageData, validateFile, imageAccept, videoAccept, documentAccept, allAccept } from '@/common/fileUpload';
@@ -6,11 +6,13 @@ import { getImageData, validateFile, imageAccept, videoAccept, documentAccept, a
 export interface FileInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   accept?: typeof imageAccept | typeof videoAccept | typeof documentAccept | typeof allAccept;
   maxFileSize?: number;
+  isEditMode?: boolean;
+  imageUrl?: string;
 }
 
 const FileInput = React.forwardRef<HTMLInputElement, FileInputProps>(
-  ({ className, maxFileSize = 1, accept = allAccept, ...props }, ref) => {
-    const [preview, setPreview] = useState<string | null>(null);
+  ({ className, maxFileSize = 10, accept = allAccept, isEditMode = false, imageUrl = '', ...props }, ref) => {
+    const [preview, setPreview] = useState<string | null>(isEditMode ? imageUrl : null);
     const [file, setFile] = useState<File | null>(null);
 
     const onChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -39,7 +41,7 @@ const FileInput = React.forwardRef<HTMLInputElement, FileInputProps>(
             className="flex h-9 cursor-pointer items-center justify-center gap-2 rounded-lg border border-border-primary px-4 py-2 font-semibold text-content-primary"
           >
             <img src="/assets/icon/plus.svg" alt="plus" className="h-4 w-4" />
-            이미지 추가
+            {isEditMode ? '이미지 수정' : '이미지 추가'}
           </label>
         </div>
 
@@ -65,15 +67,9 @@ const FileInput = React.forwardRef<HTMLInputElement, FileInputProps>(
         )}
 
         {/* preview 사진 */}
-        {/* <div className="w-40 h-40 bg-gray-200">
-          {preview && (
-            <img
-              src={preview}
-              alt="preview"
-              className="w-full h-full object-cover"
-            />
-          )}
-        </div> */}
+        <div className="h-40 bg-gray-200">
+          {preview && <img src={imageUrl} alt="preview" className="h-full w-full object-cover" />}
+        </div>
 
         <Input type="file" id={props.id} className="hidden" onChange={onChange} accept={accept} />
       </>
@@ -82,3 +78,36 @@ const FileInput = React.forwardRef<HTMLInputElement, FileInputProps>(
 );
 
 export { FileInput };
+
+interface UseImagePreviewResult {
+  previewUrl: string | null;
+  handleImageChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+}
+
+const useImagePreview = (initialImage?: string): UseImagePreviewResult => {
+  const [previewUrl, setPreviewUrl] = useState<string | null>(initialImage || null);
+
+  useEffect(() => {
+    // 컴포넌트 언마운트 시 URL 객체 정리
+    return () => {
+      if (previewUrl && previewUrl !== initialImage) {
+        URL.revokeObjectURL(previewUrl);
+      }
+    };
+  }, [previewUrl, initialImage]);
+
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreviewUrl(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    } else {
+      setPreviewUrl(null);
+    }
+  };
+
+  return { previewUrl, handleImageChange };
+};

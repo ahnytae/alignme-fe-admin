@@ -2,17 +2,21 @@ import { Button } from '@/components/ui/button';
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { ChevronRight } from 'lucide-react';
 import { useState, ReactNode } from 'react';
+import { ChangeInstrucrtors } from '../memberListPage';
+import { changeInstructor } from '@/api/users';
 
 interface InstructorChangeDialogProps {
   children: ReactNode;
+  instructors: ChangeInstrucrtors[];
+  selecteMemberId: string;
 }
 
-const InstructorChangeDialog = ({ children }: InstructorChangeDialogProps) => {
+const InstructorChangeDialog = ({ children, instructors, selecteMemberId }: InstructorChangeDialogProps) => {
   const [isOpen, setIsOpen] = useState(false);
   // 현재 모달 단계 ('select', 'confirm', 'complete')
   const [currentStep, setCurrentStep] = useState<'select' | 'confirm' | 'complete'>('select');
   // 선택한 강사
-  const [selectedInstructor, setSelectedInstructor] = useState<string | null>(null);
+  const [selectedInstructor, setSelectedInstructor] = useState<ChangeInstrucrtors | null>(null);
 
   const openDialog = () => {
     setIsOpen(true);
@@ -24,14 +28,15 @@ const InstructorChangeDialog = ({ children }: InstructorChangeDialogProps) => {
     setSelectedInstructor(null); // 선택한 강사 초기화
   };
 
-  const handleSelectInstructor = (instructor: string) => {
+  const handleSelectInstructor = (instructor: ChangeInstrucrtors) => {
     setSelectedInstructor(instructor);
     setCurrentStep('confirm');
   };
 
-  const handleConfirmChange = () => {
+  const handleConfirmChange = async () => {
     // 강사 변경 로직 수행
-    console.log(`Selected Instructor: ${selectedInstructor}`);
+
+    await changeInstructor(selectedInstructor?.id || '', selecteMemberId);
     setCurrentStep('complete');
   };
 
@@ -51,21 +56,20 @@ const InstructorChangeDialog = ({ children }: InstructorChangeDialogProps) => {
           {currentStep === 'select' && (
             <div>
               <ul className="flex max-h-[450px] flex-col gap-6 overflow-y-scroll pb-14">
-                {['강사 A', '강사 B', '강사 C', '강사 D', '강사 E', '강사 F'].map((instructor) => (
+                {instructors?.map((instructor) => (
                   <div
+                    key={instructor.id}
                     className="flex cursor-pointer items-center justify-between"
                     onClick={() => handleSelectInstructor(instructor)}
                   >
                     <div className="flex w-full flex-row items-center justify-between">
                       <div className="flex items-center gap-3">
                         <img
-                          alt=""
-                          src={
-                            'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
-                          }
+                          alt="instructor-profileImage"
+                          src={instructor.profileImage || ''}
                           className="inline-block h-14 w-14 rounded-full border border-border-primary"
                         />
-                        <p className="text-label-large text-content-primary ">{instructor}</p>
+                        <p className="text-label-large text-content-primary ">{instructor.name}</p>
                       </div>
                       <div>
                         <ChevronRight className="h-6 w-6 text-content-primary" />
@@ -80,7 +84,7 @@ const InstructorChangeDialog = ({ children }: InstructorChangeDialogProps) => {
           {/* step 2: 강사 선택 최종 확인 */}
           {currentStep === 'confirm' && (
             <div>
-              <p>{selectedInstructor}님으로 변경하시겠습니까?</p>
+              <p>{selectedInstructor?.name}님으로 변경하시겠습니까?</p>
               <DialogFooter className="pt-4">
                 <Button size="sm" variant="outline" className="w-full" onClick={closeDialog}>
                   취소

@@ -1,3 +1,4 @@
+import { getPendingUserList, handleJoinRequest } from '@/api/users';
 import {
   UserCardWrapper,
   UserCardAvatar,
@@ -7,38 +8,53 @@ import {
 } from '@/components/card/userCard';
 import PageTitle from '@/components/PageTitle';
 import { Button } from '@/components/ui/button';
-const instructorRequestPage = () => {
-  const dummy = [
-    {
-      img: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-      name: '김아무개',
-      approvalDt: '2024.05.01',
-    },
-    {
-      img: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-      name: '김아무개',
-      approvalDt: '2024.05.01',
-    },
-    {
-      img: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-      name: '김아무개',
-      approvalDt: '2024.05.01',
-    },
-  ];
+import { PATH } from '@/constant/urls';
+import { JoinStatus, PendingUserList } from '@/model/userModel';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+const InstructorRequestPage = () => {
+  const navigate = useNavigate();
+  const [requestUsers, setRequestUsers] = useState<PendingUserList[]>([]);
+  const [page, setPage] = useState(0);
+
+  async function fetchPendingUserList(page: number, size: number) {
+    const { data } = await getPendingUserList(page, size);
+    setRequestUsers(data.data);
+    setPage(data.meta.total);
+  }
+
+  useEffect(() => {
+    fetchPendingUserList(1, 10);
+  }, []);
+
+  async function handleApproveJoinRequest(userId: string, isApprove: Exclude<JoinStatus, 'PENDING'>) {
+    try {
+      await handleJoinRequest(userId, isApprove);
+      navigate(PATH.instructor_list);
+      fetchPendingUserList(1, 10);
+      // Todo: toast message
+    } catch {}
+  }
+
   return (
     <div className="mx-5 max-w-[846px] sm:mx-auto">
       <PageTitle>강사 가입 요청</PageTitle>
       <div className="text-paragraph-tiny text-content-secondary">
-        총 <span className="text-content-primary">123</span>명
+        총 <span className="text-content-primary">{page}</span>명
       </div>
 
       {/* User card 구역 */}
       <div className="mt-4 grid grid-cols-1 gap-5">
-        {dummy.map((item) => (
-          <UserCardWrapper>
+        {requestUsers?.map((item: PendingUserList, i: number) => (
+          <UserCardWrapper key={item.id + i}>
             <UserCardLeft>
-              <UserCardAvatar img={item.img} />
-              <UserCardDetails name={item.name} subLabel="요청일" subText={item.approvalDt} />
+              <UserCardAvatar img={item.profileImage || ''} />
+              <UserCardDetails
+                name={item.name}
+                subLabel="요청일"
+                subText={new Date(item.createAt).toLocaleDateString()}
+              />
             </UserCardLeft>
             <UserCardRight>
               <Button size="sm" variant="outline" className="w-full sm:w-auto">
@@ -55,4 +71,4 @@ const instructorRequestPage = () => {
   );
 };
 
-export default instructorRequestPage;
+export default InstructorRequestPage;

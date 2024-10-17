@@ -1,9 +1,40 @@
+import { autoLogin } from '@/api/auth';
 import KaKaoButton from './components/KaKaoButton';
-import { kakaoRedirectUrl } from '@/constant/urls';
+import { kakaoRedirectUrl, PATH } from '@/constant/urls';
+import { useNavigate } from 'react-router-dom';
+import { getCookie } from '@/common/cookie';
+import useUserStore from '@/stores/useUserStore';
 
 const LoginPage = () => {
-  const handleOauth = () => {
-    window.location.replace(kakaoRedirectUrl);
+  const navigate = useNavigate();
+  const userStore = useUserStore();
+
+  const handleOauth = async () => {
+    try {
+      const refreshToken = getCookie('refreshToken');
+
+      if (!refreshToken) {
+        window.location.replace(kakaoRedirectUrl);
+        return;
+      }
+
+      const { data } = await autoLogin();
+
+      if (data.isExpired) {
+        window.location.replace(kakaoRedirectUrl);
+        return;
+      }
+
+      const { createdAt, email, id, kakaoMemberId, name, role, updatedAt } = data.user;
+      userStore.email = email;
+      userStore.userName = name;
+      userStore.role = role;
+      userStore.userId = id;
+
+      navigate(PATH.content_list);
+    } catch {
+      window.location.replace(kakaoRedirectUrl);
+    }
   };
 
   return (

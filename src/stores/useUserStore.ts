@@ -1,5 +1,7 @@
 import { create } from 'zustand';
 
+export type JoinStatus = 'PENDING' | 'APPROVED' | 'REJECTED';
+
 export enum UserRole {
   MANAGER = 'MANAGER',
   INSTRUCTOR = 'INSTRUCTOR',

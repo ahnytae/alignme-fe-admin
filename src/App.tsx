@@ -7,11 +7,11 @@ import axios from 'axios';
 type TokenRefresh = { accessToken: string; refreshToken: string };
 
 function App() {
-  const { isLogin, setIsLogin, setIsLoading } = useAuthStore((state) => ({
-    isLogin: state.isLogin,
-    setIsLogin: state.setIsLogin,
-    setIsLoading: state.setIsLoading,
-  }));
+  // const { isLogin, setIsLogin, setIsLoading } = useAuthStore((state) => ({
+  //   isLogin: state.isLogin,
+  //   setIsLogin: state.setIsLogin,
+  //   setIsLoading: state.setIsLoading,
+  // }));
 
   // useLayoutEffect(() => {
   //   const accessToken = getCookie('accessToken');
