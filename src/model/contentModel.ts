@@ -6,6 +6,11 @@ const ContentLevel = {
   HARD: 'HARD',
 } as const;
 
+type InstructorInfo = {
+  instructorId: string;
+  instructorName: string;
+};
+
 type Content = {
   id: string;
   imageUrl: string;
@@ -13,6 +18,7 @@ type Content = {
   level: keyof typeof ContentLevel;
   description: string;
   createdAt: Date;
+  instructor: InstructorInfo;
 };
 
 interface CreateContentDto {
@@ -35,5 +41,5 @@ interface ContentsResponse {
   meta: PageMeta;
 }
 
-export type { Content, CreateContentDto, CreateContentResponse, ContentsResponse };
+export type { Content, InstructorInfo, CreateContentDto, CreateContentResponse, ContentsResponse };
 export { ContentLevel };

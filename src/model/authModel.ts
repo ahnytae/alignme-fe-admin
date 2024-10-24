@@ -1,4 +1,4 @@
-import { User } from "./userModel";
+import { User } from './userModel';
 
 interface AuthModel {
   message: string;
@@ -8,12 +8,15 @@ interface AuthModel {
     kakaoMemberId: string;
     email: string;
     name: string;
-    isAlerady: boolean;
+    isAlready: boolean;
   };
 }
 
 interface SignUpInstructorResponse {
   instructorId: string;
+  isMainInstructor: boolean;
+  studioName: string;
+  studioRegionName: string;
 }
 
 interface SignUpManagerResponse {
@@ -23,6 +26,7 @@ interface SignUpManagerResponse {
 interface AutoLoginResponse {
   isExpired: boolean;
   user: User;
+  isMainInstructor: boolean;
 }
 
 export type { AuthModel, SignUpInstructorResponse, SignUpManagerResponse, AutoLoginResponse };

@@ -12,6 +12,7 @@ import { createContent, deleteContent, modifyContent } from '@/api/content';
 import { useNavigate, useParams } from 'react-router-dom';
 import { PATH } from '@/constant/urls';
 import useContent from '@/stores/useContent';
+import { ACCEPTED_FILE_TYPES, FILE_LIMIT_SIZE } from '@/constant/file';
 
 const formSchema = z
   .object({
@@ -22,7 +23,10 @@ const formSchema = z
       .max(10, { message: '10자 이내로 입력해주세요.' }),
     file: z
       .instanceof(File, { message: '운동 사진을 선택해주세요.' })
-      .refine((file) => file.size <= 5000000, { message: '파일 크기는 5MB 이하여야 합니다.' }),
+      .refine((file) => file.size <= FILE_LIMIT_SIZE, {
+        message: '파일 크기는 5MB 이하여야 합니다.',
+      })
+      .refine((file) => ACCEPTED_FILE_TYPES.includes(file.type), { message: 'JPG 또는 PNG 파일만 업로드 가능합니다.' }),
     level: z.enum(['EASY', 'NORMAL', 'HARD'], { message: '난이도를 선택해주세요.' }),
     desc: z
       .string()
@@ -41,11 +45,10 @@ const levelOptions = [
 interface ContentCreateFormProps extends HTMLAttributes<HTMLDivElement> {
   isEditMode?: boolean;
 }
-const ContentCreateForm: FunctionComponent<ContentCreateFormProps> = ({ className, ...props }) => {
+const ContentCreateForm: FunctionComponent<ContentCreateFormProps> = ({ className, isEditMode }) => {
   const navigate = useNavigate();
   const { id } = useParams();
 
-  const { isEditMode } = props;
   const { title, level, description, imageUrl } = useContent();
 
   const [buttonDisabled, setButtonDisabled] = useState(true);
@@ -95,7 +98,7 @@ const ContentCreateForm: FunctionComponent<ContentCreateFormProps> = ({ classNam
   }
 
   return (
-    <div className={className} {...props}>
+    <div className={className}>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           <FormField

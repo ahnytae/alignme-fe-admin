@@ -1,17 +1,19 @@
 import { create } from 'zustand';
+import { createJSONStorage, persist } from 'zustand/middleware';
 
 interface AuthStore {
   isLogin: boolean;
-  isLoading: boolean;
   setIsLogin: (flag: boolean) => void;
-  setIsLoading: (flag: boolean) => void;
 }
 
-const useAuthStore = create<AuthStore>((set) => ({
-  isLogin: false,
-  isLoading: true,
-  setIsLogin: (flag) => set({ isLogin: flag }),
-  setIsLoading: (flag) => set({ isLoading: flag }),
-}));
+const useAuthStore = create(
+  persist<AuthStore>(
+    (set) => ({
+      isLogin: false,
+      setIsLogin: (flag) => set({ isLogin: flag }),
+    }),
+    { name: 'auth', storage: createJSONStorage(() => sessionStorage) },
+  ),
+);
 
 export default useAuthStore;

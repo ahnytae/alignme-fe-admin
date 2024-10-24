@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react';
+import React, { useRef } from 'react';
 import { ChangeEvent, useState } from 'react';
 import { Input } from '@/components/ui/input';
-import { getImageData, validateFile, imageAccept, videoAccept, documentAccept, allAccept } from '@/common/fileUpload';
+import { getImageData, imageAccept, videoAccept, documentAccept, allAccept } from '@/common/fileUpload';
 
 export interface FileInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   accept?: typeof imageAccept | typeof videoAccept | typeof documentAccept | typeof allAccept;
@@ -11,18 +11,20 @@ export interface FileInputProps extends React.InputHTMLAttributes<HTMLInputEleme
 }
 
 const FileInput = React.forwardRef<HTMLInputElement, FileInputProps>(
-  ({ className, maxFileSize = 10, accept = allAccept, isEditMode = false, imageUrl = '', ...props }, ref) => {
+  ({ className, maxFileSize = 5, accept = allAccept, isEditMode = false, imageUrl = '', ...props }, ref) => {
     const [preview, setPreview] = useState<string | null>(isEditMode ? imageUrl : null);
     const [file, setFile] = useState<File | null>(null);
+    const inputRef = useRef<HTMLInputElement>(null);
 
     const onChange = (event: ChangeEvent<HTMLInputElement>) => {
       const file = event.target.files?.[0];
-      if (!file || !validateFile(file, accept, maxFileSize)) {
-        if (accept === allAccept) {
-          alert(`${maxFileSize} MB 이하 파일만 등록가능합니다.`);
-        } else {
-          alert(`${maxFileSize} MB 이하,  ${accept} 파일만 등록가능합니다.`);
-        }
+
+      if (!file) return;
+
+      if (!file || !validateFile(file)) {
+        const sizeMessage = `${maxFileSize}MB 이하`;
+        const typeMessage = 'JPG 또는 PNG';
+        alert(`${sizeMessage}, ${typeMessage} 파일만 업로드 가능합니다.`);
         return;
       }
 
@@ -30,6 +32,33 @@ const FileInput = React.forwardRef<HTMLInputElement, FileInputProps>(
       props.onChange && props.onChange(event);
       setPreview(displayUrl);
       setFile(files![0]);
+    };
+
+    const validateFile = (file: File) => {
+      const ACCEPTED_FILE_TYPES = ['image/jpeg', 'image/png'];
+      const MAX_FILE_SIZE = maxFileSize * 1024 * 1024;
+
+      return file.size <= MAX_FILE_SIZE && ACCEPTED_FILE_TYPES.includes(file.type);
+    };
+
+    const handleDeleteImage = () => {
+      setPreview(null);
+      setFile(null);
+
+      // input 값 초기화
+      if (inputRef.current) {
+        inputRef.current.value = '';
+      }
+
+      // props로 받은 onChange에 null 전달을 위한 가짜 이벤트 생성
+      const emptyEvent = {
+        target: {
+          value: '',
+          files: null,
+        },
+      } as unknown as ChangeEvent<HTMLInputElement>;
+
+      props.onChange && props.onChange(emptyEvent);
     };
 
     return (
@@ -57,57 +86,21 @@ const FileInput = React.forwardRef<HTMLInputElement, FileInputProps>(
                 src="/assets/icon/xmark.svg"
                 alt="x mark"
                 className="h-5 w-5 cursor-pointer"
-                onClick={() => {
-                  setPreview(null);
-                  setFile(null);
-                }}
+                onClick={handleDeleteImage}
               />
             </div>
           </div>
         )}
 
         {/* preview 사진 */}
-        <div className="h-40 bg-gray-200">
-          {preview && <img src={imageUrl} alt="preview" className="h-full w-full object-cover" />}
+        <div className="flex h-full max-h-[600px] w-full items-center justify-center rounded  hover:border-gray-400">
+          {preview && <img src={preview} alt="Preview" className="h-full w-full rounded object-cover" />}
         </div>
 
-        <Input type="file" id={props.id} className="hidden" onChange={onChange} accept={accept} />
+        <Input type="file" ref={inputRef} id={props.id} className="hidden" onChange={onChange} accept={accept} />
       </>
     );
   },
 );
 
 export { FileInput };
-
-interface UseImagePreviewResult {
-  previewUrl: string | null;
-  handleImageChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-}
-
-const useImagePreview = (initialImage?: string): UseImagePreviewResult => {
-  const [previewUrl, setPreviewUrl] = useState<string | null>(initialImage || null);
-
-  useEffect(() => {
-    // 컴포넌트 언마운트 시 URL 객체 정리
-    return () => {
-      if (previewUrl && previewUrl !== initialImage) {
-        URL.revokeObjectURL(previewUrl);
-      }
-    };
-  }, [previewUrl, initialImage]);
-
-  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setPreviewUrl(reader.result as string);
-      };
-      reader.readAsDataURL(file);
-    } else {
-      setPreviewUrl(null);
-    }
-  };
-
-  return { previewUrl, handleImageChange };
-};

@@ -11,7 +11,7 @@ import useContent from '@/stores/useContent';
 
 const ContentListPage: FunctionComponent = () => {
   const navigate = useNavigate();
-  const { setTitle, setLevel, setDescription, setCreatedAt, setImageUrl } = useContent();
+  const { setTitle, setLevel, setDescription, setCreatedAt, setImageUrl, setInstructorInfo } = useContent();
 
   const [contents, setContents] = useState<Content[]>([]);
   const [total, setTotal] = useState(0);
@@ -23,6 +23,7 @@ const ContentListPage: FunctionComponent = () => {
     setDescription(content.description);
     setCreatedAt(content.createdAt);
     setImageUrl(content.imageUrl);
+    setInstructorInfo(content.instructor);
 
     navigate('/content/' + content.id);
   };

@@ -6,7 +6,7 @@ import { AlignJustify, StickyNote, TicketCheck, UsersRound } from 'lucide-react'
 import { PATH } from '@/constant/urls';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from './ui/accordion';
 import { Sheet, SheetContent, SheetTrigger } from './ui/sheet';
-import useUserStore, { UserRole } from '@/stores/useUserStore';
+import useUserStore from '@/stores/useUserStore';
 
 type Menu = { title: string; to: string; icon: JSX.Element };
 
@@ -41,19 +41,19 @@ const tabList: TabList = {
 
 const Sidebar = () => {
   const { pathname } = useLocation();
-  const { role } = useUserStore();
+  const { isMainInstructor } = useUserStore();
 
   const [openedCategory, setOpenedCategory] = useState<string[]>(() => [pathname.split('/')[1]]);
 
-  const getFilteredTabList = (userRole: UserRole): TabList => {
-    if (userRole === UserRole.INSTRUCTOR) {
+  const getFilteredTabList = (): TabList => {
+    if (!isMainInstructor) {
       const { instructor, member, ...rest } = tabList;
       return rest;
     }
     return tabList;
   };
 
-  const filteredTabList = getFilteredTabList(role);
+  const filteredTabList = getFilteredTabList();
 
   const Menu = memo(() => {
     return (

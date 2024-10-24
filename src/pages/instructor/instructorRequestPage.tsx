@@ -10,6 +10,7 @@ import PageTitle from '@/components/PageTitle';
 import { Button } from '@/components/ui/button';
 import { PATH } from '@/constant/urls';
 import { JoinStatus, PendingUserList } from '@/model/userModel';
+import { UserRole } from '@/stores/useUserStore';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -19,7 +20,7 @@ const InstructorRequestPage = () => {
   const [page, setPage] = useState(0);
 
   async function fetchPendingUserList(page: number, size: number) {
-    const { data } = await getPendingUserList(page, size);
+    const { data } = await getPendingUserList(UserRole.INSTRUCTOR, page, size);
     setRequestUsers(data.data);
     setPage(data.meta.total);
   }
@@ -28,7 +29,7 @@ const InstructorRequestPage = () => {
     fetchPendingUserList(1, 10);
   }, []);
 
-  async function handleApproveJoinRequest(userId: string, isApprove: Exclude<JoinStatus, 'PENDING'>) {
+  async function handleApproveJoinRequest(userId: string, isApprove: Exclude<JoinStatus, 'pending'>) {
     try {
       await handleJoinRequest(userId, isApprove);
       navigate(PATH.instructor_list);
@@ -53,14 +54,23 @@ const InstructorRequestPage = () => {
               <UserCardDetails
                 name={item.name}
                 subLabel="요청일"
-                subText={new Date(item.createAt).toLocaleDateString()}
+                subText={new Date(item.createdAt).toLocaleDateString()}
               />
             </UserCardLeft>
             <UserCardRight>
-              <Button size="sm" variant="outline" className="w-full sm:w-auto">
+              <Button
+                size="sm"
+                variant="outline"
+                className="w-full sm:w-auto"
+                onClick={() => handleApproveJoinRequest(item.id, 'rejected')}
+              >
                 거절
               </Button>
-              <Button size="sm" className="w-full sm:w-auto">
+              <Button
+                size="sm"
+                className="w-full sm:w-auto"
+                onClick={() => handleApproveJoinRequest(item.id, 'approved')}
+              >
                 승인
               </Button>
             </UserCardRight>

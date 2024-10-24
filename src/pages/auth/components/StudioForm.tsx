@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { signUpManager } from '@/api/auth';
+import { signUpInstructor, signUpManager } from '@/api/auth';
 import { useNavigate } from 'react-router-dom';
 import { PATH } from '@/constant/urls';
 import useAuthStore from '@/stores/useAuthStore';
@@ -25,6 +25,9 @@ const StudioForm = () => {
   const setIsLogin = useAuthStore((state) => state.setIsLogin);
   const updateUserId = useUserStore((state) => state.setUserId);
   const updateUserRole = useUserStore((state) => state.setUserRole);
+  const updateIsMainInstructor = useUserStore((state) => state.setIsMainInstructor);
+  const updateStudioName = useUserStore((state) => state.setStudioName);
+  const updateStudioRegionName = useUserStore((state) => state.setStudioRegionName);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -33,17 +36,22 @@ const StudioForm = () => {
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     try {
-      const response = await signUpManager({
+      const response = await signUpInstructor({
         studioName: data.studioName,
-        studioRegionName: data.location,
         name: data.name,
+        isMainInstructor: true,
+        studioRegionName: data.location,
       });
 
-      updateUserId(response.data.managerId);
-      updateUserRole(UserRole.MANAGER);
+      updateUserId(response.data.instructorId);
+      updateUserRole(UserRole.INSTRUCTOR);
+      updateIsMainInstructor(response.data.isMainInstructor);
+      updateStudioName(response.data.studioName);
+      updateStudioRegionName(response.data.studioRegionName);
+
       // TODO 회원가입 여부 분기 처리
       setIsLogin(true);
-      navigate(PATH.login);
+      navigate(PATH.content_list);
     } catch (error) {
       alert(error);
     }

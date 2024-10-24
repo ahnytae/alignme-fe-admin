@@ -9,7 +9,7 @@ export const login = async (code: string) => {
 };
 
 /** 강사 회원가입 API */
-export const signUpInstructor = async (params: Omit<SignUpReq, 'studioRegionName'>) => {
+export const signUpInstructor = async (params: SignUpReq) => {
   return await api.post<SignUpInstructorResponse>('/users/signup-instructor', params);
 };
 

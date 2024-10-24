@@ -4,10 +4,12 @@ import { kakaoRedirectUrl, PATH } from '@/constant/urls';
 import { useNavigate } from 'react-router-dom';
 import { getCookie } from '@/common/cookie';
 import useUserStore from '@/stores/useUserStore';
+import useAuthStore from '@/stores/useAuthStore';
 
 const LoginPage = () => {
   const navigate = useNavigate();
-  const userStore = useUserStore();
+  const { setIsLogin } = useAuthStore();
+  const { setEmail, setUserId, setUserRole, setUserName, setIsMainInstructor } = useUserStore();
 
   const handleOauth = async () => {
     try {
@@ -26,15 +28,21 @@ const LoginPage = () => {
       }
 
       const { createdAt, email, id, kakaoMemberId, name, role, updatedAt } = data.user;
-      userStore.email = email;
-      userStore.userName = name;
-      userStore.role = role;
-      userStore.userId = id;
+      const { isMainInstructor } = data;
+      setUserId(id);
+      setEmail(email);
+      setUserName(name);
+      setUserRole(role);
+      setIsLogin(true);
+
+      if (isMainInstructor) {
+        setIsMainInstructor(isMainInstructor);
+      } else {
+        setIsMainInstructor(false);
+      }
 
       navigate(PATH.content_list);
-    } catch {
-      window.location.replace(kakaoRedirectUrl);
-    }
+    } catch {}
   };
 
   return (

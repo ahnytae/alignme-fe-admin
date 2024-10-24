@@ -36,9 +36,9 @@ api.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
 
-    if (error.response && error.response.status === 401 && !originalRequest._retry) {
+    if (error.response && error.response.status.errorCode === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
-      if (error.response.data.errorCode === 'EXPIRED_TOKEN') {
+      if (error.response.data.code === 'EXPIRED_TOKEN') {
         const refreshToken = getCookie('refreshToken');
         axios.defaults.headers.common['Authorization'] = 'Bearer ' + getCookie('accessToken');
         const response = await axios.post(`${process.env.REACT_APP_BASE_API_URL}/auth/refresh`, { refreshToken });
@@ -49,6 +49,19 @@ api.interceptors.response.use(
 
         originalRequest.headers['Authorization'] = 'Bearer ' + newAccessToken;
         return api(originalRequest);
+      }
+    }
+    if (error.response && error.response.status === 401) {
+      alert('토큰 만료');
+      removeCookie('accessToken');
+      removeCookie('refreshToken');
+      window.location.replace('/login');
+    }
+    if (error.response && error.response.status === 403) {
+      if (error.response.data.code === 'USER_PENDING') {
+        alert('가입 대기 페이지로 이동됩니다.');
+        window.location.replace('/signup/pending');
+        return;
       }
     }
 

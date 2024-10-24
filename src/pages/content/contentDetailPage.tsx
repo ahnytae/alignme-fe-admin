@@ -9,7 +9,7 @@ import { deleteContent } from '@/api/content';
 const DashboardContentDetailPage: React.FC = () => {
   const navigate = useNavigate();
   const { id } = useParams();
-  const { title, level, description, createdAt, imageUrl } = useContent();
+  const { title, level, description, createdAt, imageUrl, instructorInfo } = useContent();
 
   async function onDeleteContentHandler() {
     await deleteContent(`${id}`);
@@ -40,7 +40,7 @@ const DashboardContentDetailPage: React.FC = () => {
 
           <div className="flex flex-col rounded-lg p-4">
             <dt className="text-paragraph-tiny text-content-tertiary">강사님</dt>
-            <dd className="text-label-base text-content-secondary">- 강사님</dd>
+            <dd className="text-label-base text-content-secondary">{instructorInfo.instructorName} 강사님</dd>
           </div>
         </dl>
 

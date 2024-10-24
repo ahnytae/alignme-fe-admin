@@ -17,6 +17,7 @@ interface instructorListProps extends HTMLAttributes<HTMLDivElement> {}
 const InstructorListPage: FunctionComponent<instructorListProps> = () => {
   const id = useId();
   const [instructors, setInstructors] = useState<Instructor[]>([]);
+  const [total, setTotal] = useState(0);
 
   useEffect(() => {
     (async () => {
@@ -30,6 +31,7 @@ const InstructorListPage: FunctionComponent<instructorListProps> = () => {
       }));
 
       setInstructors(filterData);
+      setTotal(data.meta.total);
     })();
   }, []);
 
@@ -48,7 +50,7 @@ const InstructorListPage: FunctionComponent<instructorListProps> = () => {
     <div className="mx-5 max-w-[846px] sm:mx-auto">
       <PageTitle>강사 목록</PageTitle>
       <div className="text-paragraph-tiny text-content-secondary">
-        총 <span className="text-content-primary">123</span>명
+        총 <span className="text-content-primary">{total}</span>명
       </div>
 
       {/* User card 구역 */}

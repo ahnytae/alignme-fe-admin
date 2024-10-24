@@ -33,6 +33,9 @@ export const PATH = {
   signupType: '/signup-type',
   /** 회원가입 정보 입력 */
   signup_type_info: '/signup/:type/info',
+
+  /** 가입 대기중 */
+  signup_pending: '/signup/pending',
 } as const;
 
 /**

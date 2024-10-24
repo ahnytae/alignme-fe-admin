@@ -34,9 +34,11 @@ const AvatarImageInput = React.forwardRef<HTMLInputElement, FileInputProps>(
               className="h-24 w-24 rounded-full border-[1.45px] border-border-primary object-cover"
             />
           ) : (
-            <div className="flex h-24 w-24 items-center justify-center rounded-full border-[1.45px] border-border-primary bg-gray-300">
-              <UserRound size={48} color="#726e6e" />
-            </div>
+            <img
+              src={`${props.defaultValue}`}
+              alt="avatar"
+              className="h-24 w-24 rounded-full border-[1.45px] border-border-primary object-cover"
+            />
           )}
 
           {/* 사진 업로드 버튼 */}

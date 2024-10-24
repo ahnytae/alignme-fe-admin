@@ -11,9 +11,8 @@ export default function SuccessAuthRedirectPage() {
   const navigate = useNavigate();
   const { setKakaoMemberId, setEmail, setUserName } = useUserStore();
 
-  const { setIsLogin, setIsLoading } = useAuthStore((state) => ({
+  const { setIsLogin } = useAuthStore((state) => ({
     setIsLogin: state.setIsLogin,
-    setIsLoading: state.setIsLoading,
   }));
 
   useEffect(() => {
@@ -23,7 +22,7 @@ export default function SuccessAuthRedirectPage() {
 
         const {
           data: {
-            data: { accessToken, refreshToken, isAlerady, kakaoMemberId, email, name },
+            data: { accessToken, refreshToken, isAlready, kakaoMemberId, email, name },
           },
         } = await api.get<AuthModel>(`/auth/user/login?code=${code}`);
 
@@ -34,17 +33,21 @@ export default function SuccessAuthRedirectPage() {
         setCookie('accessToken', accessToken);
         setCookie('refreshToken', refreshToken);
         setIsLogin(true);
-        setIsLoading(false);
 
-        if (isAlerady) {
+        if (isAlready) {
           setIsLogin(true);
-          setIsLoading(false);
           navigate(PATH.content_list);
         } else {
           navigate('/signup-type');
         }
       } catch (error) {
-        console.error(error);
+        // if (error instanceof AxiosError) {
+        //   if (error.response?.status === 403) {
+        //     console.log('e', error);
+        //     // 권한 에러 처리
+        //     navigate('/test');
+        //   }
+        // }
       }
     })();
   }, [navigate, setIsLogin]);

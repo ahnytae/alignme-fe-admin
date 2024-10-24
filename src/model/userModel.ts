@@ -7,7 +7,7 @@ type PageMeta = {
   totalPages: number;
 };
 
-type JoinStatus = 'PENDING' | 'APPROVED' | 'REJECTED';
+type JoinStatus = 'pending' | 'approved' | 'rejected';
 
 type User = {
   id: string;
@@ -26,7 +26,8 @@ type InstructorOnUser = {
   name: string;
   createdAt: Date;
   profileImage: string;
-  instructor: Pick<Instructor, 'id' | 'name'>;
+  instructor?: Pick<Instructor, 'id' | 'name'>;
+  manager?: Pick<User, 'id' | 'name'>;
 };
 
 type Instructor = {
@@ -43,9 +44,13 @@ type Instructor = {
 type PendingUserList = {
   id: string;
   name: string;
-  createAt: Date;
+  createdAt: Date;
   profileImage: string;
 };
+
+interface UserList extends PendingUserList {
+  kakaoMemberId: string;
+}
 
 interface InstructorListResponse {
   data: { instructors: Instructor[] };
@@ -54,15 +59,13 @@ interface InstructorListResponse {
 
 // 강사 소속 회원 리스트
 interface InstructorOnUserListResponse {
-  data: {
-    users: InstructorOnUser[];
-  };
+  data: { members: UserList[] };
   meta: PageMeta;
 }
 
 // 가입 대기중인 유저 리스트
 interface PendingUserListResponse {
-  data: PendingUserList[];
+  data: UserList[];
   meta: PageMeta;
 }
 
@@ -72,6 +75,7 @@ export type {
   PendingUserList,
   Instructor,
   User,
+  UserList,
   InstructorOnUser,
   InstructorListResponse,
   InstructorOnUserListResponse,

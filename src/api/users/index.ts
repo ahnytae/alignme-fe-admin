@@ -5,6 +5,7 @@ import {
   PendingUserListResponse,
 } from '@/model/userModel';
 import api from '../common';
+import { UserRole } from '@/stores/useUserStore';
 
 /** 해당 스튜디오 강사 전체목록 API */
 export const getInstructors = async () => {
@@ -13,7 +14,7 @@ export const getInstructors = async () => {
 
 /** 사용자 내보내기 */
 export const removeUser = async (userId: string) => {
-  return await api.delete(`/users/leave-user/?userId=${userId}`);
+  return await api.delete(`/users/leave-user?userId=${userId}`);
 };
 
 /** 회원 리스트 */
@@ -22,8 +23,8 @@ export const getMembers = async () => {
 };
 
 /** 가입 대기중인 유저 리스트 */
-export const getPendingUserList = async (page: number, limit: number) => {
-  return await api.get<PendingUserListResponse>(`/users/join-requests?page=${page}&limit=${limit}`);
+export const getPendingUserList = async (type: UserRole, page: number, limit: number) => {
+  return await api.get<PendingUserListResponse>(`/users/join-requests?type=${type}&page=${page}&limit=${limit}`);
 };
 
 /** 가입 요청 승인 or 거절 */

@@ -1,5 +1,6 @@
 export type SignUpReq = {
   studioName: string;
-  studioRegionName: string;
   name: string;
+  isMainInstructor: boolean;
+  studioRegionName?: string;
 };

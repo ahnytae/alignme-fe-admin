@@ -5,7 +5,7 @@ type PageParams = 'instructor' | 'studio';
 
 const PAGE_TYPE = {
   instructor: '강사',
-  studio: '레슨장',
+  studio: '대표 원장',
 };
 
 const SignupFormPage = () => {

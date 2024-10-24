@@ -58,7 +58,7 @@ const InstructorChangeDialog = ({ children, instructors, selecteMemberId }: Inst
               <ul className="flex max-h-[450px] flex-col gap-6 overflow-y-scroll pb-14">
                 {instructors?.map((instructor) => (
                   <div
-                    key={instructor.id}
+                  key={instructor.id}
                     className="flex cursor-pointer items-center justify-between"
                     onClick={() => handleSelectInstructor(instructor)}
                   >
