@@ -1,15 +1,29 @@
 import { PATH } from '@/constant/urls';
 import useAuthStore from '@/stores/useAuthStore';
-import { Navigate, Outlet } from 'react-router-dom';
+import { Navigate, Outlet, useLocation } from 'react-router-dom';
+
+const excludePath: string[] = [
+  PATH.login,
+  PATH.auth_kakao_success,
+  PATH.signupType,
+  PATH.signup_type_info,
+  PATH.signup_pending,
+];
 
 const PrivateRoute = () => {
-  const { isLogin, isLoading } = useAuthStore((state) => ({ isLogin: state.isLogin, isLoading: state.isLoading }));
+  const location = useLocation();
 
-  if (isLoading) {
-    return <div>login,,,</div>;
+  const { isLogin } = useAuthStore((state) => ({ isLogin: state.isLogin }));
+
+  if (excludePath.includes(location.pathname)) {
+    return <Outlet />;
   }
 
-  return isLogin ? <Outlet /> : <Navigate to={PATH.login} />;
+  if (!isLogin) {
+    return <Navigate to={PATH.login} />;
+  }
+
+  return <Outlet />;
 };
 
 export default PrivateRoute;

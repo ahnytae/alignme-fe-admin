@@ -8,16 +8,26 @@ import { Input } from '@/components/ui/input';
 import { FileInput } from '@/components/ui/fileInput';
 import { Textarea } from '@/components/ui/textarea';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio';
+import { createContent, deleteContent, modifyContent } from '@/api/content';
+import { useNavigate, useParams } from 'react-router-dom';
+import { PATH } from '@/constant/urls';
+import useContent from '@/stores/useContent';
+import { ACCEPTED_FILE_TYPES, FILE_LIMIT_SIZE } from '@/constant/file';
 
 const formSchema = z
   .object({
-    name: z
+    title: z
       .string()
       .trim()
       .min(1, { message: '운동 이름을 입력해주세요.' })
       .max(10, { message: '10자 이내로 입력해주세요.' }),
-    img: z.string().url({ message: '운동 사진을 입력해주세요.' }).min(1, { message: '운동 사진을 입력해주세요.' }),
-    level: z.enum(['easy', 'normal', 'hard'], { message: '난이도를 선택해주세요.' }),
+    file: z
+      .instanceof(File, { message: '운동 사진을 선택해주세요.' })
+      .refine((file) => file.size <= FILE_LIMIT_SIZE, {
+        message: '파일 크기는 5MB 이하여야 합니다.',
+      })
+      .refine((file) => ACCEPTED_FILE_TYPES.includes(file.type), { message: 'JPG 또는 PNG 파일만 업로드 가능합니다.' }),
+    level: z.enum(['EASY', 'NORMAL', 'HARD'], { message: '난이도를 선택해주세요.' }),
     desc: z
       .string()
       .trim()
@@ -27,22 +37,29 @@ const formSchema = z
   .strict();
 
 const levelOptions = [
-  { id: '1', name: '쉬움', value: 'easy' },
-  { id: '2', name: '보통', value: 'normal' },
-  { id: '3', name: '어려움', value: 'hard' },
+  { id: '1', title: '쉬움', value: 'EASY' },
+  { id: '2', title: '보통', value: 'NORMAL' },
+  { id: '3', title: '어려움', value: 'HARD' },
 ];
 
-interface ContentCreateFormProps extends HTMLAttributes<HTMLDivElement> {}
-const ContentCreateForm: FunctionComponent<ContentCreateFormProps> = ({ className, ...props }) => {
+interface ContentCreateFormProps extends HTMLAttributes<HTMLDivElement> {
+  isEditMode?: boolean;
+}
+const ContentCreateForm: FunctionComponent<ContentCreateFormProps> = ({ className, isEditMode }) => {
+  const navigate = useNavigate();
+  const { id } = useParams();
+
+  const { title, level, description, imageUrl } = useContent();
+
   const [buttonDisabled, setButtonDisabled] = useState(true);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: '',
-      img: '',
-      level: undefined,
-      desc: '',
+      title: (isEditMode && title) || '',
+      file: undefined,
+      level: (isEditMode && (level as 'EASY' | 'NORMAL' | 'HARD')) || undefined,
+      desc: (isEditMode && description) || '',
     },
   });
 
@@ -50,34 +67,72 @@ const ContentCreateForm: FunctionComponent<ContentCreateFormProps> = ({ classNam
     setButtonDisabled(!form.formState.isValid);
   }, [form.formState.isValid]);
 
+  async function onSubmit(data: z.infer<typeof formSchema>) {
+    const formData = new FormData();
+
+    // 파일 추가
+    if (data.file instanceof File) {
+      formData.append('file', data.file, data.file.name);
+    } else {
+      console.error('No file selected');
+      return;
+    }
+
+    const { title, level, desc } = data;
+
+    try {
+      formData.append('title', title);
+      formData.append('level', level);
+      formData.append('description', desc);
+
+      if (isEditMode) {
+        await modifyContent(`${id}`, formData);
+      } else {
+        await createContent(formData);
+      }
+
+      navigate(PATH.content_list);
+    } catch {
+      // Todo: erorr toast
+    }
+  }
+
   return (
-    <div className={className} {...props}>
+    <div className={className}>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit((data) => console.log(data))} className="space-y-6">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           <FormField
             control={form.control}
-            name="name"
+            name="title"
             render={({ field }) => (
               <FormItem>
                 <FormLabel isRequired={true}>운동 이름</FormLabel>
                 <FormDescription>운동 이름을 입력해주세요.</FormDescription>
                 <FormControl>
-                  <Input placeholder="운동 이름" {...field} isError={!!form.formState.errors.name} />
+                  <Input placeholder="운동 이름" {...field} isError={!!form.formState.errors.title} />
                 </FormControl>
-                <FormMessage>{form.formState.errors.name?.message}</FormMessage>
+                <FormMessage>{form.formState.errors.title?.message}</FormMessage>
               </FormItem>
             )}
           />
 
           <FormField
             control={form.control}
-            name="img"
+            name="file"
             render={({ field }) => (
               <FormItem>
                 <FormLabel isRequired={true}>운동 사진</FormLabel>
                 <FormDescription>운동 자세가 모두 보이는 이미지를 등록해주세요.</FormDescription>
                 <FormControl>
-                  <FileInput id="img" {...field} />
+                  <FileInput
+                    id="file"
+                    onChange={(e) => field.onChange(e.target.files?.[0])}
+                    onBlur={field.onBlur}
+                    name={field.name}
+                    ref={field.ref}
+                    isEditMode={isEditMode}
+                    imageUrl={imageUrl}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -99,7 +154,7 @@ const ContentCreateForm: FunctionComponent<ContentCreateFormProps> = ({ classNam
                           <RadioGroupItem value={option.value} />
                         </FormControl>
                         <FormLabel className="cursor-pointer text-paragraph-small font-medium text-[#62626A]">
-                          {option.name}
+                          {option.title}
                         </FormLabel>
                       </FormItem>
                     ))}
@@ -124,10 +179,10 @@ const ContentCreateForm: FunctionComponent<ContentCreateFormProps> = ({ classNam
               </FormItem>
             )}
           />
+          <Button className="mt-9" type="submit" size="area" variant="secondary" disabled={buttonDisabled}>
+            등록하기
+          </Button>
         </form>
-        <Button className="mt-9" type="submit" size="area" variant="secondary" disabled={buttonDisabled}>
-          등록하기
-        </Button>
       </Form>
     </div>
   );

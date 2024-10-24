@@ -1,9 +1,48 @@
+import { autoLogin } from '@/api/auth';
 import KaKaoButton from './components/KaKaoButton';
-import { kakaoRedirectUrl } from '@/constant/urls';
+import { kakaoRedirectUrl, PATH } from '@/constant/urls';
+import { useNavigate } from 'react-router-dom';
+import { getCookie } from '@/common/cookie';
+import useUserStore from '@/stores/useUserStore';
+import useAuthStore from '@/stores/useAuthStore';
 
 const LoginPage = () => {
-  const handleOauth = () => {
-    window.location.replace(kakaoRedirectUrl);
+  const navigate = useNavigate();
+  const { setIsLogin } = useAuthStore();
+  const { setEmail, setUserId, setUserRole, setUserName, setIsMainInstructor } = useUserStore();
+
+  const handleOauth = async () => {
+    try {
+      const refreshToken = getCookie('refreshToken');
+
+      if (!refreshToken) {
+        window.location.replace(kakaoRedirectUrl);
+        return;
+      }
+
+      const { data } = await autoLogin();
+
+      if (data.isExpired) {
+        window.location.replace(kakaoRedirectUrl);
+        return;
+      }
+
+      const { createdAt, email, id, kakaoMemberId, name, role, updatedAt } = data.user;
+      const { isMainInstructor } = data;
+      setUserId(id);
+      setEmail(email);
+      setUserName(name);
+      setUserRole(role);
+      setIsLogin(true);
+
+      if (isMainInstructor) {
+        setIsMainInstructor(isMainInstructor);
+      } else {
+        setIsMainInstructor(false);
+      }
+
+      navigate(PATH.content_list);
+    } catch {}
   };
 
   return (

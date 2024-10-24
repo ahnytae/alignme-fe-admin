@@ -10,31 +10,28 @@ import PageTitle from '@/components/PageTitle';
 import { Button } from '@/components/ui/button';
 import RemoveUserDialog from '@/components/dialog/removeUserDialog';
 import { getInstructors, removeUser } from '@/api/users';
+import { Instructor } from '@/model/userModel';
 
 interface instructorListProps extends HTMLAttributes<HTMLDivElement> {}
 
-type InstrucrtoInfo = {
-  kakaoMemberId: string;
-  id: string;
-  name: string;
-  createdAt: Date;
-};
-
 const InstructorListPage: FunctionComponent<instructorListProps> = () => {
   const id = useId();
-  const [instructors, setInstructors] = useState<InstrucrtoInfo[]>([]);
+  const [instructors, setInstructors] = useState<Instructor[]>([]);
+  const [total, setTotal] = useState(0);
 
   useEffect(() => {
     (async () => {
       const { data } = await getInstructors();
-      const filterData = data.data.map((instructor) => ({
-        kakaoMemberId: instructor.user.kakaoMemberId,
+      const filterData = data.data.instructors.map((instructor) => ({
         id: instructor.id,
-        name: instructor.user.name,
-        createdAt: instructor.user.createdAt,
+        kakaoMemberId: instructor.kakaoMemberId,
+        name: instructor.name,
+        createdAt: instructor.createdAt,
+        profileImage: instructor.profileImage,
       }));
 
       setInstructors(filterData);
+      setTotal(data.meta.total);
     })();
   }, []);
 
@@ -53,7 +50,7 @@ const InstructorListPage: FunctionComponent<instructorListProps> = () => {
     <div className="mx-5 max-w-[846px] sm:mx-auto">
       <PageTitle>강사 목록</PageTitle>
       <div className="text-paragraph-tiny text-content-secondary">
-        총 <span className="text-content-primary">123</span>명
+        총 <span className="text-content-primary">{total}</span>명
       </div>
 
       {/* User card 구역 */}
@@ -61,7 +58,7 @@ const InstructorListPage: FunctionComponent<instructorListProps> = () => {
         {instructors?.map((instructor, i) => (
           <UserCardWrapper key={id + i}>
             <UserCardLeft>
-              <UserCardAvatar img={''} />
+              <UserCardAvatar img={instructor.profileImage || ''} />
               <UserCardDetails
                 name={instructor.name}
                 subLabel="승인일"

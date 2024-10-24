@@ -23,6 +23,9 @@ const InstructorForm = () => {
   const setIsLogin = useAuthStore((state) => state.setIsLogin);
   const updateUserId = useUserStore((state) => state.setUserId);
   const updateUserRole = useUserStore((state) => state.setUserRole);
+  const updateStudioName = useUserStore((state) => state.setStudioName);
+  const updateStudioRegionName = useUserStore((state) => state.setStudioRegionName);
+  const updateIsMainInstructor = useUserStore((state) => state.setIsMainInstructor);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -34,9 +37,16 @@ const InstructorForm = () => {
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     try {
-      const response = await signUpInstructor({ studioName: data.studioName, name: data.name });
+      const response = await signUpInstructor({
+        studioName: data.studioName,
+        name: data.name,
+        isMainInstructor: false,
+      });
       updateUserId(response.data.instructorId);
       updateUserRole(UserRole.INSTRUCTOR);
+      updateStudioName(response.data.studioName);
+      updateStudioRegionName(response.data.studioRegionName);
+      updateIsMainInstructor(response.data.isMainInstructor);
 
       // TODO 회원가입 여부 분기 처리
       setIsLogin(true);

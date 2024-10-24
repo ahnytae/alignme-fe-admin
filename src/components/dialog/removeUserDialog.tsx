@@ -12,7 +12,6 @@ interface UserOutDialogProps {
 
 const RemoveUserDialog = ({ children, userId, username, type, onSubmit }: UserOutDialogProps) => {
   const typeText = type === 'member' ? '회원' : '강사';
-
   const [isOpen, setIsOpen] = useState(false);
   const onClose = () => setIsOpen(false);
 

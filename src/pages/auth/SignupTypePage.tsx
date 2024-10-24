@@ -40,7 +40,7 @@ const SignupTypePage = () => {
           <div className="flex flex-col gap-2">
             <p className="text-label-base text-content-secondary">레슨장을 운영중이에요.</p>
             <SelectButton value="studio" isSelected={selectedType === 'studio'} onClick={handleSelect}>
-              레슨장으로 가입하기
+              대표강사로 가입하기
             </SelectButton>
           </div>
         </div>
