@@ -1,4 +1,4 @@
-import { FunctionComponent, HTMLAttributes, useEffect, useState } from 'react';
+import { FunctionComponent, HTMLAttributes, useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -13,6 +13,8 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { PATH } from '@/constant/urls';
 import useContent from '@/stores/useContent';
 import { ACCEPTED_FILE_TYPES, FILE_LIMIT_SIZE } from '@/constant/file';
+import useCalculatePose from '@/hooks/useCalculatePose';
+import { PoseData } from '@/pose/core';
 
 const formSchema = z
   .object({
@@ -46,8 +48,22 @@ interface ContentCreateFormProps extends HTMLAttributes<HTMLDivElement> {
   isEditMode?: boolean;
 }
 const ContentCreateForm: FunctionComponent<ContentCreateFormProps> = ({ className, isEditMode }) => {
+  function onError(msg: string) {
+    alert(msg);
+    return msg;
+  }
+
+  function onSuccess(data: PoseData) {
+    console.log('success!', data);
+    return data;
+    alert('컨텐츠 등록이 완료되었습니다.');
+  }
+
+  const { executePose } = useCalculatePose();
+
   const navigate = useNavigate();
   const { id } = useParams();
+  // const imageRef = useRef<HTMLImageElement>(null);
 
   const { title, level, description, imageUrl } = useContent();
 
@@ -66,6 +82,10 @@ const ContentCreateForm: FunctionComponent<ContentCreateFormProps> = ({ classNam
   useEffect(() => {
     setButtonDisabled(!form.formState.isValid);
   }, [form.formState.isValid]);
+
+  async function test(arg: any) {
+    await executePose(arg, onSuccess, onError);
+  }
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
     const formData = new FormData();
@@ -91,7 +111,7 @@ const ContentCreateForm: FunctionComponent<ContentCreateFormProps> = ({ classNam
         await createContent(formData);
       }
 
-      navigate(PATH.content_list);
+      // navigate(PATH.content_list);
     } catch {
       // Todo: erorr toast
     }
@@ -132,6 +152,7 @@ const ContentCreateForm: FunctionComponent<ContentCreateFormProps> = ({ classNam
                     ref={field.ref}
                     isEditMode={isEditMode}
                     imageUrl={imageUrl}
+                    cb={test}
                   />
                 </FormControl>
                 <FormMessage />

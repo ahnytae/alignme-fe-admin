@@ -3,10 +3,12 @@ import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
 import SelectButton from './components/SelectButton';
 import { seg, PATH } from '@/constant/urls';
+import useCheckLoginRedirect from '@/hooks/useCheckLoginRedirect';
 
 const SignupTypePage = () => {
   /** hooks */
   const navigate = useNavigate();
+  // useCheckLoginRedirect();
 
   /** states */
   const [selectedType, setSelectedType] = useState<string | null>(null);

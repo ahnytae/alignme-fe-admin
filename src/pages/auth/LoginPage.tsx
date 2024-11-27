@@ -5,15 +5,19 @@ import { useNavigate } from 'react-router-dom';
 import { getCookie } from '@/common/cookie';
 import useUserStore from '@/stores/useUserStore';
 import useAuthStore from '@/stores/useAuthStore';
+import useCheckLoginRedirect from '@/hooks/useCheckLoginRedirect';
+import { getUserInfo } from '@/api/users';
 
 const LoginPage = () => {
   const navigate = useNavigate();
   const { setIsLogin } = useAuthStore();
   const { setEmail, setUserId, setUserRole, setUserName, setIsMainInstructor } = useUserStore();
+  // useCheckLoginRedirect();
 
   const handleOauth = async () => {
     try {
       const refreshToken = getCookie('refreshToken');
+      console.log('!!@', refreshToken);
 
       if (!refreshToken) {
         window.location.replace(kakaoRedirectUrl);
@@ -27,8 +31,10 @@ const LoginPage = () => {
         return;
       }
 
-      const { createdAt, email, id, kakaoMemberId, name, role, updatedAt } = data.user;
-      const { isMainInstructor } = data;
+      const {
+        data: { id, kakaoMemberId, email, name, role, isMainInstructor },
+      } = await getUserInfo();
+
       setUserId(id);
       setEmail(email);
       setUserName(name);

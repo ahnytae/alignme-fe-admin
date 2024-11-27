@@ -50,6 +50,7 @@ type PendingUserList = {
 
 interface UserList extends PendingUserList {
   kakaoMemberId: string;
+  onInstructor: string;
 }
 
 interface InstructorListResponse {
@@ -69,6 +70,16 @@ interface PendingUserListResponse {
   meta: PageMeta;
 }
 
+// 유저 정보 조회
+interface UserInfoResponse {
+  id: string;
+  kakaoMemberId: number;
+  email: string;
+  name: string;
+  role: UserRole;
+  isMainInstructor: boolean;
+}
+
 export type {
   PageMeta,
   JoinStatus,
@@ -80,4 +91,5 @@ export type {
   InstructorListResponse,
   InstructorOnUserListResponse,
   PendingUserListResponse,
+  UserInfoResponse,
 };

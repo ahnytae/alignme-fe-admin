@@ -51,9 +51,7 @@ const InstructorForm = () => {
       // TODO 회원가입 여부 분기 처리
       setIsLogin(true);
       navigate(PATH.content_list);
-    } catch (error) {
-      alert(error);
-    }
+    } catch {}
   };
 
   return (

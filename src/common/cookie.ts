@@ -7,7 +7,7 @@ const cookies = new Cookies();
  * @param {string} value
  */
 export const setCookie = (name: string, value: string) => {
-  return cookies.set(name, value, { maxAge: 60 * 60 * 3, path: '/' });
+  return cookies.set(name, value, { maxAge: 1 * 24 * 60 * 60, path: '/' });
 };
 
 /** Key를 받아 Value를 반환

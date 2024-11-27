@@ -7,6 +7,7 @@ import { PATH } from '@/constant/urls';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from './ui/accordion';
 import { Sheet, SheetContent, SheetTrigger } from './ui/sheet';
 import useUserStore from '@/stores/useUserStore';
+import useAuthStore from '@/stores/useAuthStore';
 
 type Menu = { title: string; to: string; icon: JSX.Element };
 
@@ -41,6 +42,7 @@ const tabList: TabList = {
 
 const Sidebar = () => {
   const { pathname } = useLocation();
+  const { setIsLogin } = useAuthStore();
   const { isMainInstructor } = useUserStore();
 
   const [openedCategory, setOpenedCategory] = useState<string[]>(() => [pathname.split('/')[1]]);
@@ -54,6 +56,11 @@ const Sidebar = () => {
   };
 
   const filteredTabList = getFilteredTabList();
+
+  function handleLogout() {
+    setIsLogin(false);
+    window.location.replace(PATH.login);
+  }
 
   const Menu = memo(() => {
     return (
@@ -98,6 +105,8 @@ const Sidebar = () => {
         <div className="mobile:hidden">
           <Menu />
         </div>
+
+        <button onClick={handleLogout}>Logout</button>
       </div>
 
       <div className="w-full overflow-y-auto">

@@ -8,16 +8,21 @@ export interface FileInputProps extends React.InputHTMLAttributes<HTMLInputEleme
   maxFileSize?: number;
   isEditMode?: boolean;
   imageUrl?: string;
+  cb?: (arg: any) => void;
 }
 
 const FileInput = React.forwardRef<HTMLInputElement, FileInputProps>(
-  ({ className, maxFileSize = 5, accept = allAccept, isEditMode = false, imageUrl = '', ...props }, ref) => {
+  ({ className, maxFileSize = 5, accept = allAccept, isEditMode = false, imageUrl = '', cb, ...props }, ref) => {
     const [preview, setPreview] = useState<string | null>(isEditMode ? imageUrl : null);
     const [file, setFile] = useState<File | null>(null);
     const inputRef = useRef<HTMLInputElement>(null);
 
+    const imgRef = useRef<HTMLImageElement>(null);
+
     const onChange = (event: ChangeEvent<HTMLInputElement>) => {
       const file = event.target.files?.[0];
+
+      console.log('!@#', imgRef.current);
 
       if (!file) return;
 
@@ -32,6 +37,8 @@ const FileInput = React.forwardRef<HTMLInputElement, FileInputProps>(
       props.onChange && props.onChange(event);
       setPreview(displayUrl);
       setFile(files![0]);
+
+      cb!(imgRef.current);
     };
 
     const validateFile = (file: File) => {
@@ -94,7 +101,9 @@ const FileInput = React.forwardRef<HTMLInputElement, FileInputProps>(
 
         {/* preview 사진 */}
         <div className="flex h-full max-h-[600px] w-full items-center justify-center rounded  hover:border-gray-400">
-          {preview && <img src={preview} alt="Preview" className="h-full w-full rounded object-cover" />}
+          {/* {preview && <img ref={imgRef} src={preview} alt="Preview" className="h-full w-full rounded object-cover" />} */}
+
+          <img ref={imgRef} src={preview || ''} alt="Preview" className="h-full w-full rounded object-cover" />
         </div>
 
         <Input type="file" ref={inputRef} id={props.id} className="hidden" onChange={onChange} accept={accept} />

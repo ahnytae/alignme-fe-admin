@@ -3,6 +3,7 @@ import {
   InstructorOnUserListResponse,
   JoinStatus,
   PendingUserListResponse,
+  UserInfoResponse,
 } from '@/model/userModel';
 import api from '../common';
 import { UserRole } from '@/stores/useUserStore';
@@ -35,4 +36,9 @@ export const handleJoinRequest = async (userId: string, isApprove: JoinStatus) =
 /** 멤버가 속한 강사 변경 */
 export const changeInstructor = async (instructorId: string, memberId: string) => {
   return await api.post(`/users/change-instructor`, { instructorId, memberId });
+};
+
+/** 유저 정보 조회 */
+export const getUserInfo = async () => {
+  return await api.get<UserInfoResponse>(`/users/user-info`);
 };

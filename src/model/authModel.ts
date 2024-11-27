@@ -25,7 +25,7 @@ interface SignUpManagerResponse {
 
 interface AutoLoginResponse {
   isExpired: boolean;
-  user: User;
+  user: Pick<User, 'id' | 'email' | 'name' | 'role'>;
   isMainInstructor: boolean;
 }
 

@@ -6,10 +6,13 @@ import { AuthModel } from '@/model/authModel';
 import { PATH } from '@/constant/urls';
 import useUserStore from '@/stores/useUserStore';
 import useAuthStore from '@/stores/useAuthStore';
+import useCheckLoginRedirect from '@/hooks/useCheckLoginRedirect';
+import { getUserInfo } from '@/api/users';
 
 export default function SuccessAuthRedirectPage() {
   const navigate = useNavigate();
-  const { setKakaoMemberId, setEmail, setUserName } = useUserStore();
+  const { setKakaoMemberId, setEmail, setUserName, setIsMainInstructor } = useUserStore();
+  // useCheckLoginRedirect();
 
   const { setIsLogin } = useAuthStore((state) => ({
     setIsLogin: state.setIsLogin,
@@ -22,17 +25,24 @@ export default function SuccessAuthRedirectPage() {
 
         const {
           data: {
-            data: { accessToken, refreshToken, isAlready, kakaoMemberId, email, name },
+            data: { accessToken, refreshToken, isAlready },
           },
         } = await api.get<AuthModel>(`/auth/user/login?code=${code}`);
 
+        setCookie('accessToken', accessToken);
+        // setCookie('refreshToken', refreshToken);
+        setIsLogin(true);
+
+        const {
+          data: { id, kakaoMemberId, email, name, role, isMainInstructor },
+        } = await getUserInfo();
+
         setEmail(email);
         setUserName(name);
-        setKakaoMemberId(kakaoMemberId);
+        setKakaoMemberId(`${kakaoMemberId}`);
+        setIsMainInstructor(isMainInstructor);
 
-        setCookie('accessToken', accessToken);
-        setCookie('refreshToken', refreshToken);
-        setIsLogin(true);
+        console.log('@@@', isAlready, isMainInstructor);
 
         if (isAlready) {
           setIsLogin(true);

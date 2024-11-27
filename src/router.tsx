@@ -1,4 +1,6 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import ComponentUiTest from './pages/component-ui-test';
 import ContentListPage from './pages/content/contentListPage';
@@ -14,50 +16,52 @@ import SuccessAuthRedirectPage from './pages/auth/SuccessAuthRedirectPage';
 import Sidebar from './components/Sidebar';
 import { PATH } from './constant/urls';
 import PrivateRoute from '@/components/PrivateRoute';
-import InstructorRequestPage from './pages/instructor/InstructorRequestPage';
-import InstructorListPage from './pages/instructor/InstructorListPage';
 import { ErrorBoundary } from 'react-error-boundary';
 import ErrorFallback from './ErrorFallback';
 import { Suspense } from 'react';
 import LoadingSpinner from './components/ui/loadingSpinner';
+
+import 'react-toastify/dist/ReactToastify.css';
+import InstructorListPage from './pages/instructor/InstructorListPage';
+import InstructorRequestPage from './pages/instructor/InstructorRequestPage';
 
 const Router = () => {
   return (
     <ErrorBoundary FallbackComponent={ErrorFallback}>
       <Suspense fallback={<LoadingSpinner />}>
         <Routes>
-          {/* <Route path="/test" element={<ComponentUiTest />} /> */}
           <Route path="/" element={<Navigate to={PATH.login} />} />
-          <Route element={<PrivateRoute />}>
-            {/** 회원가입 페이지 */}
-            <Route path={PATH.login} element={<LoginPage />} />
-            <Route path={PATH.auth_kakao_success} element={<SuccessAuthRedirectPage />} />
-            <Route path={PATH.signupType} element={<SignupTypePage />} />
-            <Route path={PATH.signup_type_info} element={<SignupFormPage />} />
-            {/* 가입 대기 페이지 */}
-            <Route path={PATH.signup_pending} element={<h1>가입 대기중...</h1>} />
+          {/* <Route element={<PrivateRoute />}> */}
+          {/** 회원가입 페이지 */}
+          <Route path={PATH.login} element={<LoginPage />} />
+          <Route path={PATH.auth_kakao_success} element={<SuccessAuthRedirectPage />} />
+          <Route path={PATH.signupType} element={<SignupTypePage />} />
+          <Route path={PATH.signup_type_info} element={<SignupFormPage />} />
+          {/* 가입 대기 페이지 */}
+          <Route path={PATH.signup_pending} element={<h1>가입 대기중...</h1>} />
 
-            <Route element={<Sidebar />}>
-              {/** 콘텐츠 관리 */}
-              <Route path={PATH.content_list} element={<ContentListPage />} />
-              <Route path={PATH.content_create} element={<ContentCreatePage isEditMode={false} />} />
-              <Route path={PATH.content_id} element={<ContentDetailPage />} />
-              <Route path={PATH.content_edit} element={<ContentCreatePage isEditMode={true} />} />
+          <Route element={<Sidebar />}>
+            {/** 콘텐츠 관리 */}
+            <Route path={PATH.content_list} element={<ContentListPage />} />
+            <Route path={PATH.content_create} element={<ContentCreatePage isEditMode={false} />} />
+            <Route path={PATH.content_id} element={<ContentDetailPage />} />
+            <Route path={PATH.content_edit} element={<ContentCreatePage isEditMode={true} />} />
 
-              {/* 강사 관리 */}
-              <Route path={PATH.instructor_list} element={<InstructorListPage />} />
-              <Route path={PATH.instructor_request} element={<InstructorRequestPage />} />
+            {/* 강사 관리 */}
+            <Route path={PATH.instructor_list} element={<InstructorListPage />} />
+            <Route path={PATH.instructor_request} element={<InstructorRequestPage />} />
 
-              {/* 회원 관리 */}
-              <Route path={PATH.member_list} element={<MemberListPage />} />
-              <Route path={PATH.member_request} element={<MemberRequestPage />} />
+            {/* 회원 관리 */}
+            <Route path={PATH.member_list} element={<MemberListPage />} />
+            <Route path={PATH.member_request} element={<MemberRequestPage />} />
 
-              {/* 마이페이지 */}
-              <Route path={PATH.myPage} element={<MyPage />} />
-            </Route>
+            {/* 마이페이지 */}
+            <Route path={PATH.myPage} element={<MyPage />} />
           </Route>
+          {/* </Route> */}
         </Routes>
       </Suspense>
+      <ToastContainer position="top-center" limit={1} closeButton={false} autoClose={4000} hideProgressBar />
     </ErrorBoundary>
   );
 };

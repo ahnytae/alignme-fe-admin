@@ -40,9 +40,9 @@ const InstructorListPage: FunctionComponent<instructorListProps> = () => {
     handleRemoveUser(userId);
   }
 
-  const handleRemoveUser = (userId: string) => {
+  const handleRemoveUser = async (userId: string) => {
     try {
-      removeUser(userId);
+      await removeUser(userId);
     } catch {}
   };
 

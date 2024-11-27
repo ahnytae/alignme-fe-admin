@@ -4,14 +4,21 @@ import { ChevronRight } from 'lucide-react';
 import { useState, ReactNode } from 'react';
 import { ChangeInstrucrtors } from '../memberListPage';
 import { changeInstructor } from '@/api/users';
+import { toast } from 'react-toastify';
 
 interface InstructorChangeDialogProps {
   children: ReactNode;
   instructors: ChangeInstrucrtors[];
   selecteMemberId: string;
+  successChangedInstrucrtor: () => void;
 }
 
-const InstructorChangeDialog = ({ children, instructors, selecteMemberId }: InstructorChangeDialogProps) => {
+const InstructorChangeDialog = ({
+  children,
+  instructors,
+  selecteMemberId,
+  successChangedInstrucrtor,
+}: InstructorChangeDialogProps) => {
   const [isOpen, setIsOpen] = useState(false);
   // 현재 모달 단계 ('select', 'confirm', 'complete')
   const [currentStep, setCurrentStep] = useState<'select' | 'confirm' | 'complete'>('select');
@@ -34,10 +41,14 @@ const InstructorChangeDialog = ({ children, instructors, selecteMemberId }: Inst
   };
 
   const handleConfirmChange = async () => {
-    // 강사 변경 로직 수행
-
-    await changeInstructor(selectedInstructor?.id || '', selecteMemberId);
-    setCurrentStep('complete');
+    try {
+      await changeInstructor(selectedInstructor?.id || '', selecteMemberId);
+      setCurrentStep('complete');
+      successChangedInstrucrtor();
+      toast.success('소속 강사 변경되었습니다.');
+    } catch {
+      setIsOpen(false);
+    }
   };
 
   return (
@@ -58,7 +69,7 @@ const InstructorChangeDialog = ({ children, instructors, selecteMemberId }: Inst
               <ul className="flex max-h-[450px] flex-col gap-6 overflow-y-scroll pb-14">
                 {instructors?.map((instructor) => (
                   <div
-                  key={instructor.id}
+                    key={instructor.id}
                     className="flex cursor-pointer items-center justify-between"
                     onClick={() => handleSelectInstructor(instructor)}
                   >

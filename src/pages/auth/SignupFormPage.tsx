@@ -1,5 +1,6 @@
 import { useParams } from 'react-router-dom';
 import { InstructorForm, StudioForm } from './components';
+import useCheckLoginRedirect from '@/hooks/useCheckLoginRedirect';
 
 type PageParams = 'instructor' | 'studio';
 
@@ -10,6 +11,8 @@ const PAGE_TYPE = {
 
 const SignupFormPage = () => {
   const { type } = useParams<{ type: PageParams }>();
+
+  // useCheckLoginRedirect();
 
   if (!type || !(type in PAGE_TYPE)) {
     return <div>ㅜ.ㅜ</div>;

@@ -22,6 +22,9 @@ const MemberListPage: FunctionComponent<MemberListProps> = () => {
   const { role } = useUserStore();
   const [users, setUsers] = useState<UserList[]>([]);
   const [total, setTotal] = useState(0);
+  const [callbackComplete, setCallbackComplete] = useState(false);
+
+  const successChangedInstrucrtor = () => setCallbackComplete((prev) => !prev);
 
   const [instructors, setInstructors] = useState<ChangeInstrucrtors[]>([]);
 
@@ -45,7 +48,7 @@ const MemberListPage: FunctionComponent<MemberListProps> = () => {
   useEffect(() => {
     fetchMembers();
     fetchInstroctors();
-  }, []);
+  }, [callbackComplete]);
 
   if (!users) return <div>Loading...</div>;
 
@@ -77,14 +80,18 @@ const MemberListPage: FunctionComponent<MemberListProps> = () => {
                 <UserCardAvatar img={user?.profileImage || ''} />
                 <UserCardDetails
                   name={user.name}
-                  subLabel="승인일"
+                  subLabel="가입일"
                   subText={new Date(user.createdAt).toLocaleDateString()}
-                  // additionalInfo={`${role === UserRole.INSTRUCTOR ? user?.instructor?.name : user?.manager?.name} 강사님`}
+                  additionalInfo={`${user.onInstructor} 강사님`}
                 />
               </UserCardLeft>
               {/* role = manager만 (추후 처리) */}
               <UserCardRight>
-                <InstructorChangeDialog instructors={instructors} selecteMemberId={user.id}>
+                <InstructorChangeDialog
+                  instructors={instructors}
+                  selecteMemberId={user.id}
+                  successChangedInstrucrtor={successChangedInstrucrtor}
+                >
                   <Button size="sm" variant="outline" className="w-full sm:w-auto">
                     소속강사 변경
                   </Button>
