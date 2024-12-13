@@ -11,8 +11,8 @@ export interface FileInputProps extends React.InputHTMLAttributes<HTMLInputEleme
   cb?: (arg: any) => void;
 }
 
-const FileInput = React.forwardRef<HTMLInputElement, FileInputProps>(
-  ({ className, maxFileSize = 5, accept = allAccept, isEditMode = false, imageUrl = '', cb, ...props }, ref) => {
+const FileInput = React.forwardRef<HTMLImageElement, FileInputProps>(
+  ({ className, maxFileSize = 5, accept = allAccept, isEditMode = false, imageUrl = '', ...props }, ref) => {
     const [preview, setPreview] = useState<string | null>(isEditMode ? imageUrl : null);
     const [file, setFile] = useState<File | null>(null);
     const inputRef = useRef<HTMLInputElement>(null);
@@ -21,8 +21,6 @@ const FileInput = React.forwardRef<HTMLInputElement, FileInputProps>(
 
     const onChange = (event: ChangeEvent<HTMLInputElement>) => {
       const file = event.target.files?.[0];
-
-      console.log('!@#', imgRef.current);
 
       if (!file) return;
 
@@ -37,8 +35,6 @@ const FileInput = React.forwardRef<HTMLInputElement, FileInputProps>(
       props.onChange && props.onChange(event);
       setPreview(displayUrl);
       setFile(files![0]);
-
-      cb!(imgRef.current);
     };
 
     const validateFile = (file: File) => {
@@ -103,7 +99,8 @@ const FileInput = React.forwardRef<HTMLInputElement, FileInputProps>(
         <div className="flex h-full max-h-[600px] w-full items-center justify-center rounded  hover:border-gray-400">
           {/* {preview && <img ref={imgRef} src={preview} alt="Preview" className="h-full w-full rounded object-cover" />} */}
 
-          <img ref={imgRef} src={preview || ''} alt="Preview" className="h-full w-full rounded object-cover" />
+          {/* <img ref={imgRef} src={preview || ''} alt="Preview" className="h-full w-full rounded object-cover" /> */}
+          {preview && <img ref={ref} src={preview} alt="Preview" className="h-full w-full rounded object-cover" />}
         </div>
 
         <Input type="file" ref={inputRef} id={props.id} className="hidden" onChange={onChange} accept={accept} />

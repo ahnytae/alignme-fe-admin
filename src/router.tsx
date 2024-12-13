@@ -22,8 +22,8 @@ import { Suspense } from 'react';
 import LoadingSpinner from './components/ui/loadingSpinner';
 
 import 'react-toastify/dist/ReactToastify.css';
-import InstructorListPage from './pages/instructor/InstructorListPage';
-import InstructorRequestPage from './pages/instructor/InstructorRequestPage';
+import InstructorListPage from './pages/instructor/instructorListPage';
+import InstructorRequestPage from './pages/instructor/instructorRequestPage';
 
 const Router = () => {
   return (

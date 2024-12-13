@@ -13,8 +13,8 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { PATH } from '@/constant/urls';
 import useContent from '@/stores/useContent';
 import { ACCEPTED_FILE_TYPES, FILE_LIMIT_SIZE } from '@/constant/file';
-import useCalculatePose from '@/hooks/useCalculatePose';
-import { PoseData } from '@/pose/core';
+import { ImagePoseLandmarker } from '@/core/ImagePoseLandmarker';
+import { SkletonData } from '@/core/CalculatePose';
 
 const formSchema = z
   .object({
@@ -53,20 +53,13 @@ const ContentCreateForm: FunctionComponent<ContentCreateFormProps> = ({ classNam
     return msg;
   }
 
-  function onSuccess(data: PoseData) {
-    console.log('success!', data);
-    return data;
-    alert('컨텐츠 등록이 완료되었습니다.');
-  }
-
-  const { executePose } = useCalculatePose();
-
   const navigate = useNavigate();
   const { id } = useParams();
   // const imageRef = useRef<HTMLImageElement>(null);
 
   const { title, level, description, imageUrl } = useContent();
 
+  const poseImageRef = useRef<HTMLImageElement>(null);
   const [buttonDisabled, setButtonDisabled] = useState(true);
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -83,13 +76,9 @@ const ContentCreateForm: FunctionComponent<ContentCreateFormProps> = ({ classNam
     setButtonDisabled(!form.formState.isValid);
   }, [form.formState.isValid]);
 
-  async function test(arg: any) {
-    await executePose(arg, onSuccess, onError);
-  }
-
   async function onSubmit(data: z.infer<typeof formSchema>) {
     const formData = new FormData();
-
+    console.log('data', data.file);
     // 파일 추가
     if (data.file instanceof File) {
       formData.append('file', data.file, data.file.name);
@@ -100,10 +89,19 @@ const ContentCreateForm: FunctionComponent<ContentCreateFormProps> = ({ classNam
 
     const { title, level, desc } = data;
 
+    ImagePoseLandmarker.init();
     try {
+      const poseData: SkletonData[] | null = await ImagePoseLandmarker.start(poseImageRef.current!);
+      if (poseData === null) {
+        alert('자세 부정확 함');
+        return;
+      }
+      console.log('poseData::', poseData);
+
       formData.append('title', title);
       formData.append('level', level);
       formData.append('description', desc);
+      formData.append('poseData', JSON.stringify(poseData));
 
       if (isEditMode) {
         await modifyContent(`${id}`, formData);
@@ -149,10 +147,10 @@ const ContentCreateForm: FunctionComponent<ContentCreateFormProps> = ({ classNam
                     onChange={(e) => field.onChange(e.target.files?.[0])}
                     onBlur={field.onBlur}
                     name={field.name}
-                    ref={field.ref}
+                    // ref={field.ref}
+                    ref={poseImageRef}
                     isEditMode={isEditMode}
                     imageUrl={imageUrl}
-                    cb={test}
                   />
                 </FormControl>
                 <FormMessage />
