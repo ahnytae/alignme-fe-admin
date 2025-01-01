@@ -105,8 +105,13 @@ const Sidebar = () => {
         <div className="mobile:hidden">
           <Menu />
         </div>
+        <button
+          className="w-full text-left px-4 py-2 mt-4 text-sm font-bold text-gray-700 bg-white rounded-lg border border-1"
+          onClick={handleLogout}
+        >
+          로그아웃
+        </button>
 
-        <button onClick={handleLogout}>Logout</button>
       </div>
 
       <div className="w-full overflow-y-auto">

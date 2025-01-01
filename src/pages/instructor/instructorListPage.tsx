@@ -9,8 +9,8 @@ import {
 import PageTitle from '@/components/PageTitle';
 import { Button } from '@/components/ui/button';
 import RemoveUserDialog from '@/components/dialog/removeUserDialog';
-import { getInstructors, removeUser } from '@/api/users';
 import { Instructor } from '@/model/userModel';
+import { getInstructors, removeUser } from '@/api/users';
 
 interface instructorListProps extends HTMLAttributes<HTMLDivElement> {}
 
@@ -19,25 +19,28 @@ const InstructorListPage: FunctionComponent<instructorListProps> = () => {
   const [instructors, setInstructors] = useState<Instructor[]>([]);
   const [total, setTotal] = useState(0);
 
-  useEffect(() => {
-    (async () => {
-      const { data } = await getInstructors();
-      const filterData = data.data.instructors.map((instructor) => ({
-        id: instructor.id,
-        kakaoMemberId: instructor.kakaoMemberId,
-        name: instructor.name,
-        createdAt: instructor.createdAt,
-        profileImage: instructor.profileImage,
-      }));
+  async function fetchInstructors() {
+    const { data } = await getInstructors();
+    const filterData = data.data.instructors.map((instructor) => ({
+      id: instructor.id,
+      kakaoMemberId: instructor.kakaoMemberId,
+      name: instructor.name,
+      createdAt: instructor.createdAt,
+      profileImage: instructor.profileImage,
+    }));
 
-      setInstructors(filterData);
-      setTotal(data.meta.total);
-    })();
+    setInstructors(filterData);
+    setTotal(data.meta.total);
+  }
+
+  useEffect(() => {
+    fetchInstructors()
   }, []);
 
   // 사용자 내보내기
-  function onSubmit(userId: string) {
-    handleRemoveUser(userId);
+  async function onSubmit(userId: string) {
+    await handleRemoveUser(userId);
+    await fetchInstructors();
   }
 
   const handleRemoveUser = async (userId: string) => {

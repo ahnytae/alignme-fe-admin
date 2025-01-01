@@ -27,7 +27,7 @@ export default function SuccessAuthRedirectPage() {
           data: {
             data: { accessToken, refreshToken, isAlready },
           },
-        } = await api.get<AuthModel>(`/auth/user/login?code=${code}`);
+        } = await api.get<AuthModel>(`/auth/user/login?type=admin&code=${code}`);
 
         setCookie('accessToken', accessToken);
         // setCookie('refreshToken', refreshToken);

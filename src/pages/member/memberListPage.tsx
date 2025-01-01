@@ -10,9 +10,9 @@ import PageTitle from '@/components/PageTitle';
 import { Button } from '@/components/ui/button';
 import InstructorChangeDialog from './components/InstructorChangeDialog';
 import RemoveUserDialog from '@/components/dialog/removeUserDialog';
-import { getInstructors, getMembers, removeUser } from '@/api/users';
 import { Instructor, UserList } from '@/model/userModel';
 import useUserStore from '@/stores/useUserStore';
+import { getInstructors, getMembers, removeUser } from '@/api/users';
 
 interface MemberListProps extends HTMLAttributes<HTMLDivElement> {}
 
@@ -60,7 +60,7 @@ const MemberListPage: FunctionComponent<MemberListProps> = () => {
   const handleRemoveUser = async (userId: string) => {
     try {
       await removeUser(userId);
-      fetchMembers();
+      await fetchMembers();
     } catch {}
   };
 
