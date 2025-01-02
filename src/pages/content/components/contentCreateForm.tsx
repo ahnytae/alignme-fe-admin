@@ -95,6 +95,8 @@ const ContentCreateForm: FunctionComponent<ContentCreateFormProps> = ({ classNam
       formData.append('file', data.file, data.file.name);
     }
 
+    console.log('**', formData)
+
     const { title, level, desc } = data;
 
     try {

@@ -394,12 +394,12 @@ export class CalculatePose {
     if (!leftShoulder && !rightShoulder) {
       return { shoulder: false };
     }
-    // if (!leftHip && !rightHip) {
-    //   return { hip: false };
-    // }
-    // if (!leftKnee && !rightKnee) {
-    //   return { knee: false };
-    // }
+    if (!leftHip && !rightHip) {
+      return { hip: false };
+    }
+    if (!leftKnee && !rightKnee) {
+      return { knee: false };
+    }
     // if (!leftAnkle && !rightAnkle) {
     //   return { ankle: false };
     // }
