@@ -14,6 +14,7 @@ interface AuthModel {
 
 interface SignUpInstructorResponse {
   instructorId: string;
+  instructorName: string;
   isMainInstructor: boolean;
   studioName: string;
   studioRegionName: string;

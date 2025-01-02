@@ -28,6 +28,7 @@ const StudioForm = () => {
   const updateIsMainInstructor = useUserStore((state) => state.setIsMainInstructor);
   const updateStudioName = useUserStore((state) => state.setStudioName);
   const updateStudioRegionName = useUserStore((state) => state.setStudioRegionName);
+  const updateUserName = useUserStore((state) => state.setUserName);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -48,6 +49,7 @@ const StudioForm = () => {
       updateIsMainInstructor(response.data.isMainInstructor);
       updateStudioName(response.data.studioName);
       updateStudioRegionName(response.data.studioRegionName);
+      updateUserName(response.data.instructorName);
 
       // TODO 회원가입 여부 분기 처리
       setIsLogin(true);

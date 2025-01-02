@@ -78,6 +78,10 @@ interface UserInfoResponse {
   name: string;
   role: UserRole;
   isMainInstructor: boolean;
+  studio: {
+    studioName: string;
+    studioRegionName: string;
+  };
 }
 
 export type {

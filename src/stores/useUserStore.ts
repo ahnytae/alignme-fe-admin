@@ -42,6 +42,7 @@ const useUserStore = create(
       email: '',
       userName: '',
       studioName: '',
+      studioRegionName: '',
       profileImageUrl: '',
       setUserRole: (role: UserRole) => set(() => ({ role })),
       setIsMainInstructor: (isMainInstructor: boolean) => set(() => ({ isMainInstructor })),

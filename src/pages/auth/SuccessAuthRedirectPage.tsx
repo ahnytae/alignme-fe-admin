@@ -11,7 +11,8 @@ import { getUserInfo } from '@/api/users';
 
 export default function SuccessAuthRedirectPage() {
   const navigate = useNavigate();
-  const { setKakaoMemberId, setEmail, setUserName, setIsMainInstructor } = useUserStore();
+  const { setKakaoMemberId, setEmail, setUserName, setIsMainInstructor, setStudioName, setStudioRegionName } =
+    useUserStore();
   // useCheckLoginRedirect();
 
   const { setIsLogin } = useAuthStore((state) => ({
@@ -25,12 +26,11 @@ export default function SuccessAuthRedirectPage() {
 
         const {
           data: {
-            data: { accessToken, refreshToken, isAlready },
+            data: { accessToken, isAlready },
           },
         } = await api.get<AuthModel>(`/auth/user/login?type=admin&code=${code}`);
 
         setCookie('accessToken', accessToken);
-        // setCookie('refreshToken', refreshToken);
         setIsLogin(true);
 
         const {
@@ -41,8 +41,9 @@ export default function SuccessAuthRedirectPage() {
         setUserName(name);
         setKakaoMemberId(`${kakaoMemberId}`);
         setIsMainInstructor(isMainInstructor);
-
-        console.log('@@@', isAlready, isMainInstructor);
+        // setStudioName(studio.studioName);
+        // setStudioRegionName(studio.studioRegionName);
+        console.log('@@', isAlready);
 
         if (isAlready) {
           setIsLogin(true);
