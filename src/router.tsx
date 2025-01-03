@@ -24,6 +24,7 @@ import LoadingSpinner from './components/ui/loadingSpinner';
 import 'react-toastify/dist/ReactToastify.css';
 import InstructorListPage from './pages/instructor/instructorListPage';
 import InstructorRequestPage from './pages/instructor/instructorRequestPage';
+import RegistrationPendingPage from './components/RegistrationPendingPage';
 
 const Router = () => {
   return (
@@ -38,7 +39,7 @@ const Router = () => {
           <Route path={PATH.signupType} element={<SignupTypePage />} />
           <Route path={PATH.signup_type_info} element={<SignupFormPage />} />
           {/* 가입 대기 페이지 */}
-          <Route path={PATH.signup_pending} element={<h1>가입 대기중...</h1>} />
+          <Route path={PATH.signup_pending} element={<RegistrationPendingPage />} />
 
           <Route element={<Sidebar />}>
             {/** 콘텐츠 관리 */}

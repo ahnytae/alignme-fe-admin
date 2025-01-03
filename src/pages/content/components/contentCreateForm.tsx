@@ -22,9 +22,10 @@ const formSchema = z
   .object({
     title: z
       .string()
-      .trim()
       .min(1, { message: '운동 이름을 입력해주세요.' })
-      .max(10, { message: '10자 이내로 입력해주세요.' }),
+      .refine((value) => value.trim().length >= 1, { message: '운동 이름을 입력해주세요.' })
+      .refine((value) => value.trim().length <= 15, { message: '15자 이내로 입력해주세요.' }),
+
     file: z.union([
       z
         .instanceof(File)
@@ -73,6 +74,7 @@ const ContentCreateForm: FunctionComponent<ContentCreateFormProps> = ({ classNam
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
+    mode: 'onChange',
     defaultValues: {
       title: (isEditMode && title) || '',
       file: (isEditMode && imageUrl) || undefined,
@@ -94,8 +96,6 @@ const ContentCreateForm: FunctionComponent<ContentCreateFormProps> = ({ classNam
     if (data.file instanceof File && form.formState.defaultValues?.file !== form.getValues('file')) {
       formData.append('file', data.file, data.file.name);
     }
-
-    console.log('**', formData)
 
     const { title, level, desc } = data;
 
@@ -121,9 +121,9 @@ const ContentCreateForm: FunctionComponent<ContentCreateFormProps> = ({ classNam
       console.log('###', formData);
       if (isEditMode) {
         await modifyContent(`${id}`, formData);
-        toast.success('콘텐츠 수정이 왼료되었어요');
+        toast.success('콘텐츠 수정이 완료되었어요');
       } else {
-        toast.success('콘텐츠 등록이 왼료되었어요');
+        toast.success('콘텐츠 등록이 완료되었어요');
         await createContent(formData);
       }
 
@@ -151,7 +151,7 @@ const ContentCreateForm: FunctionComponent<ContentCreateFormProps> = ({ classNam
                   <FormLabel isRequired={true}>운동 이름</FormLabel>
                   <FormDescription>운동 이름을 입력해주세요.</FormDescription>
                   <FormControl>
-                    <Input placeholder="운동 이름" {...field} isError={!!form.formState.errors.title} />
+                    <Input placeholder="운동 이름" {...field} isError={!!form.formState.errors.title?.message} />
                   </FormControl>
                   <FormMessage>{form.formState.errors.title?.message}</FormMessage>
                 </FormItem>
