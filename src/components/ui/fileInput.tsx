@@ -96,14 +96,14 @@ const FileInput = React.forwardRef<HTMLImageElement, FileInputProps>(
         )}
 
         {/* preview 사진 */}
-        <div className="flex h-full h-[400px] w-full items-center justify-center rounded  hover:border-gray-400">
+        <div className="flex h-[400px] w-full items-center justify-center rounded  hover:border-gray-400">
           {/* {preview && <img ref={imgRef} src={preview} alt="Preview" className="h-full w-full rounded object-cover" />} */}
 
           {/* <img ref={imgRef} src={preview || ''} alt="Preview" className="h-full w-full rounded object-cover" /> */}
           {preview && <img ref={ref} src={preview} alt="Preview" className="h-full w-full rounded object-cover" />}
         </div>
 
-        <Input type="file" ref={inputRef} id={props.id} className="hidden" onChange={onChange} accept={accept} />
+        <Input type="file" ref={inputRef} id={props.id} className="hidden" onChange={onChange} accept="image/*" />
       </>
     );
   },

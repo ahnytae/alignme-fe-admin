@@ -15,8 +15,8 @@ import useContent from '@/stores/useContent';
 import { ACCEPTED_FILE_TYPES, FILE_LIMIT_SIZE } from '@/constant/file';
 import { ImagePoseLandmarker } from '@/core/ImagePoseLandmarker';
 import { SkletonData } from '@/core/CalculatePose';
-import { toast } from 'react-toastify';
 import Spinner from '@/components/ui/spinner';
+import { toast } from 'react-toastify';
 
 const formSchema = z
   .object({
