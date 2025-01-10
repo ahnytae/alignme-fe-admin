@@ -106,15 +106,14 @@ const Sidebar = () => {
           <Menu />
         </div>
         <button
-          className="w-full text-left px-4 py-2 mt-4 text-sm font-bold text-gray-700 bg-white rounded-lg border border-1"
+          className="border-1 mt-4 w-full rounded-lg border bg-white px-4 py-2 text-left text-sm font-bold text-gray-700"
           onClick={handleLogout}
         >
           로그아웃
         </button>
-
       </div>
 
-      <div className="w-full overflow-y-auto">
+      <div className="w-full overflow-y-auto px-5 py-[40px]">
         <Outlet />
       </div>
     </div>
