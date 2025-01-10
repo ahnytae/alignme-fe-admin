@@ -72,20 +72,28 @@ const Sidebar = () => {
 
             {/** 메뉴 리스트 */}
             {tab.menuList.map((menu) => (
-              <AccordionContent key={domain + menu.to}>
-                <Link to={menu.to}>
-                  <Button
-                    className={`w-full justify-start gap-2 text-label-small text-content-primary transition-all hover:bg-secondary-100 ${pathname !== menu.to ? 'text-content-secondary' : ''}`}
-                    startAdornment={menu.icon}
-                    variant="custom"
-                  >
-                    {menu.title}
-                  </Button>
-                </Link>
-              </AccordionContent>
+              <>
+                <AccordionContent key={domain + menu.to}>
+                  <Link to={menu.to}>
+                    <Button
+                      className={`w-full justify-start gap-2 text-label-small text-content-primary transition-all hover:bg-secondary-100 ${pathname !== menu.to ? 'text-content-secondary' : ''}`}
+                      startAdornment={menu.icon}
+                      variant="custom"
+                    >
+                      {menu.title}
+                    </Button>
+                  </Link>
+                </AccordionContent>
+              </>
             ))}
           </AccordionItem>
         ))}
+        <button
+          className="border-1 mt-4 w-full rounded-lg border bg-white px-4 py-2 text-left text-sm font-bold text-gray-700"
+          onClick={handleLogout}
+        >
+          로그아웃
+        </button>
       </Accordion>
     );
   });
@@ -105,12 +113,6 @@ const Sidebar = () => {
         <div className="mobile:hidden">
           <Menu />
         </div>
-        <button
-          className="border-1 mt-4 w-full rounded-lg border bg-white px-4 py-2 text-left text-sm font-bold text-gray-700"
-          onClick={handleLogout}
-        >
-          로그아웃
-        </button>
       </div>
 
       <div className="w-full overflow-y-auto px-5 py-[40px]">
