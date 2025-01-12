@@ -13,6 +13,7 @@ import { JoinStatus, PendingUserList } from '@/model/userModel';
 import { UserRole } from '@/stores/useUserStore';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const InstructorRequestPage = () => {
   const navigate = useNavigate();
@@ -35,7 +36,10 @@ const InstructorRequestPage = () => {
       navigate(PATH.instructor_list);
       fetchPendingUserList(1, 10);
       // Todo: toast message
-    } catch {}
+      toast.success('가입 승인을 했습니다');
+    } catch {
+      toast.success('가입 승인에 실패했습니다');
+    }
   }
 
   return (

@@ -11,6 +11,7 @@ import { Button } from '@/components/ui/button';
 import RemoveUserDialog from '@/components/dialog/removeUserDialog';
 import { Instructor } from '@/model/userModel';
 import { getInstructors, removeUser } from '@/api/users';
+import { toast } from 'react-toastify';
 
 interface instructorListProps extends HTMLAttributes<HTMLDivElement> {}
 
@@ -34,7 +35,7 @@ const InstructorListPage: FunctionComponent<instructorListProps> = () => {
   }
 
   useEffect(() => {
-    fetchInstructors()
+    fetchInstructors();
   }, []);
 
   // 사용자 내보내기
@@ -46,7 +47,10 @@ const InstructorListPage: FunctionComponent<instructorListProps> = () => {
   const handleRemoveUser = async (userId: string) => {
     try {
       await removeUser(userId);
-    } catch {}
+      toast.success('강사를 내보냈습니다');
+    } catch {
+      toast.success('강사 내보내기에 실패했습니다');
+    }
   };
 
   return (

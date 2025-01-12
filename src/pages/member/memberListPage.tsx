@@ -13,6 +13,7 @@ import RemoveUserDialog from '@/components/dialog/removeUserDialog';
 import { Instructor, UserList } from '@/model/userModel';
 import useUserStore from '@/stores/useUserStore';
 import { getInstructors, getMembers, removeUser } from '@/api/users';
+import { toast } from 'react-toastify';
 
 interface MemberListProps extends HTMLAttributes<HTMLDivElement> {}
 
@@ -61,7 +62,10 @@ const MemberListPage: FunctionComponent<MemberListProps> = () => {
     try {
       await removeUser(userId);
       await fetchMembers();
-    } catch {}
+      toast.success('회원을 내보냈습니다');
+    } catch {
+      toast.success('회원 내보내기에 실패했습니다');
+    }
   };
 
   return (
