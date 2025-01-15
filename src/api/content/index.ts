@@ -1,6 +1,5 @@
 import { ContentsResponse, CreateContentResponse } from '@/model/contentModel';
 import api from '../common';
-import { SkletonData } from '@/core/CalculatePose';
 
 /** 콘텐츠 조회 api */
 export const getContents = async () => {

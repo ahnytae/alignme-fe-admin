@@ -8,15 +8,14 @@ import { Input } from '@/components/ui/input';
 import { FileInput } from '@/components/ui/fileInput';
 import { Textarea } from '@/components/ui/textarea';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio';
-import { createContent, deleteContent, modifyContent } from '@/api/content';
+import { createContent, modifyContent } from '@/api/content';
 import { useNavigate, useParams } from 'react-router-dom';
 import { PATH } from '@/constant/urls';
 import useContent from '@/stores/useContent';
 import { ACCEPTED_FILE_TYPES, FILE_LIMIT_SIZE } from '@/constant/file';
-import { ImagePoseLandmarker } from '@/core/ImagePoseLandmarker';
-import { SkletonData } from '@/core/CalculatePose';
 import Spinner from '@/components/ui/spinner';
 import { toast } from 'react-toastify';
+import { ImagePoseLandmarker, IPose } from '@ahnytae/alignme-core/dist';
 
 const formSchema = z
   .object({
@@ -100,11 +99,10 @@ const ContentCreateForm: FunctionComponent<ContentCreateFormProps> = ({ classNam
     const { title, level, desc } = data;
 
     try {
-      let poseData: SkletonData[] | null = null;
+      let poseData: IPose[] | null = null;
       setLoading(true);
 
       if (form.formState.defaultValues?.file !== form.getValues('file')) {
-        ImagePoseLandmarker.init();
         poseData = await ImagePoseLandmarker.start(poseImageRef.current!);
         console.log('*&**', poseData);
         if (poseData === null) {

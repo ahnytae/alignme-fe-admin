@@ -1,4 +1,4 @@
-import { memo, useState } from 'react';
+import { Fragment, memo, useId, useState } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import { Button } from './ui/button';
 import { Link } from 'react-router-dom';
@@ -44,6 +44,7 @@ const Sidebar = () => {
   const { pathname } = useLocation();
   const { setIsLogin } = useAuthStore();
   const { isMainInstructor } = useUserStore();
+  const id = useId();
 
   const [openedCategory, setOpenedCategory] = useState<string[]>(() => [pathname.split('/')[1]]);
 
@@ -71,8 +72,8 @@ const Sidebar = () => {
             <AccordionTrigger className="text-label-small text-content-primary">{tab.categoryName}</AccordionTrigger>
 
             {/** 메뉴 리스트 */}
-            {tab.menuList.map((menu) => (
-              <>
+            {tab.menuList.map((menu, idx) => (
+              <Fragment key={id + idx}>
                 <AccordionContent key={domain + menu.to}>
                   <Link to={menu.to}>
                     <Button
@@ -84,7 +85,7 @@ const Sidebar = () => {
                     </Button>
                   </Link>
                 </AccordionContent>
-              </>
+              </Fragment>
             ))}
           </AccordionItem>
         ))}

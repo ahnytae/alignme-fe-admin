@@ -25,6 +25,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import InstructorListPage from './pages/instructor/instructorListPage';
 import InstructorRequestPage from './pages/instructor/instructorRequestPage';
 import RegistrationPendingPage from './components/RegistrationPendingPage';
+import NotFoundPage from './components/NotFoundPage';
 
 const Router = () => {
   return (
@@ -58,6 +59,7 @@ const Router = () => {
 
             {/* 마이페이지 */}
             <Route path={PATH.myPage} element={<MyPage />} />
+            <Route path="*" element={<NotFoundPage />} />
           </Route>
           {/* </Route> */}
         </Routes>
