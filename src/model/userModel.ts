@@ -39,6 +39,7 @@ type Instructor = {
   name: string;
   createdAt: Date;
   profileImage: string;
+  isMeInstructor: boolean;
 };
 
 type PendingUserList = {

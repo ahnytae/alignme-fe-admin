@@ -22,12 +22,14 @@ const InstructorListPage: FunctionComponent<instructorListProps> = () => {
 
   async function fetchInstructors() {
     const { data } = await getInstructors();
+
     const filterData = data.data.instructors.map((instructor) => ({
       id: instructor.id,
       kakaoMemberId: instructor.kakaoMemberId,
       name: instructor.name,
       createdAt: instructor.createdAt,
       profileImage: instructor.profileImage,
+      isMeInstructor: instructor.isMeInstructor,
     }));
 
     setInstructors(filterData);
@@ -80,7 +82,7 @@ const InstructorListPage: FunctionComponent<instructorListProps> = () => {
                 type="instructor"
                 onSubmit={onSubmit}
               >
-                <Button size="sm" className="w-full sm:w-auto">
+                <Button size="sm" className="w-full sm:w-auto" disabled={instructor.isMeInstructor}>
                   내보내기
                 </Button>
               </RemoveUserDialog>
